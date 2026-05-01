@@ -27,6 +27,7 @@ export function useSplitOrdinalsInscriptionScreenLogic() {
   const account = useCurrentAccount()
   const minOutputValue = getAddressUtxoDust(account.address)
   const [outputValue, setOutputValue] = useState(defaultOutputValue)
+  const [enableRBF, setEnableRBF] = useState(true)
 
   const { feeRate } = useFeeRateBar()
 
@@ -71,7 +72,7 @@ export function useSplitOrdinalsInscriptionScreenLogic() {
   }
 
   const onClickNext = () => {
-    createSplitTx({ inscriptionId: inscription.inscriptionId, feeRate, outputValue })
+    createSplitTx({ inscriptionId: inscription.inscriptionId, feeRate, outputValue, enableRBF })
       .then(toSignData => {
         nav.navigate('TxConfirmScreen', { toSignData })
       })
@@ -86,6 +87,8 @@ export function useSplitOrdinalsInscriptionScreenLogic() {
     inscriptions,
     minOutputValue,
     splitedCount,
+    enableRBF,
+    setEnableRBF,
     error,
     disabled,
     onOutputValueChange,

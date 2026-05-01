@@ -2,6 +2,7 @@ import { Button, Column, Content, Header, Input, Layout, Row, Text } from '@/ui/
 import { FeeRateBar } from '@/ui/components/FeeRateBar';
 import InscriptionPreview from '@/ui/components/InscriptionPreview';
 import { OutputValueBar } from '@/ui/components/OutputValueBar';
+import { RBFBar } from '@/ui/components/RBFBar';
 import { useSendOrdinalsInscriptionScreenLogic } from '@unisat/wallet-state';
 
 export default function SendOrdinalsInscriptionScreen() {
@@ -12,6 +13,8 @@ export default function SendOrdinalsInscriptionScreen() {
     setOutputValue,
     minOutputValue,
     defaultOutputValue,
+    enableRBF,
+    setEnableRBF,
     inscriptions,
     error,
     disabled,
@@ -57,6 +60,9 @@ export default function SendOrdinalsInscriptionScreen() {
 
           <Column mt="lg">
             <FeeRateBar />
+          </Column>
+          <Column mt="lg">
+            <RBFBar value={enableRBF} onChange={setEnableRBF} />
           </Column>
 
           {error && <Text text={error} color="error" />}

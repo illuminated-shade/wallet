@@ -39,6 +39,7 @@ export function useSendOrdinalsInscriptionScreenLogic() {
   const defaultOutputValue = inscription ? inscription.outputValue : 10000
 
   const [outputValue, setOutputValue] = useState(defaultOutputValue)
+  const [enableRBF, setEnableRBF] = useState(true)
   const [inscriptions, setInscriptions] = useState<Inscription[]>([])
 
   const wallet = useWallet()
@@ -110,6 +111,7 @@ export function useSendOrdinalsInscriptionScreenLogic() {
       inscriptionId: inscription.inscriptionId,
       feeRate,
       outputValue,
+      enableRBF,
     })
       .then(toSignData => {
         nav.navigate('TxConfirmScreen', { toSignData })
@@ -125,6 +127,8 @@ export function useSendOrdinalsInscriptionScreenLogic() {
     onAddressInputChange,
     toInfo,
     outputValue,
+    enableRBF,
+    setEnableRBF,
     minOutputValue,
     defaultOutputValue,
     setOutputValue,

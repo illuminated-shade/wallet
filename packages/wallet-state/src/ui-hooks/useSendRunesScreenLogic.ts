@@ -42,6 +42,7 @@ export function useSendRunesScreenLogic() {
 
   const currentAccount = useCurrentAccount()
   const [outputValue, setOutputValue] = useState(defaultOutputValue)
+  const [enableRBF, setEnableRBF] = useState(true)
   const minOutputValue = useMemo(() => {
     if (toInfo.address) {
       const dust1 = getAddressUtxoDust(currentAccount.address)
@@ -138,6 +139,7 @@ export function useSendRunesScreenLogic() {
       runeAmount: runeAmount,
       outputValue: outputValue,
       feeRate,
+      enableRBF,
     })
       .then(toSignData => {
         nav.navigate('TxConfirmScreen', { toSignData })
@@ -163,6 +165,8 @@ export function useSendRunesScreenLogic() {
     defaultOutputValue,
     minOutputValue,
     setOutputValue,
+    enableRBF,
+    setEnableRBF,
     t,
 
     // actions

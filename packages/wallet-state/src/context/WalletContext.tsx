@@ -261,6 +261,7 @@ export interface WalletController {
     feeRate: number
     outputValue?: number
     btcUtxos: UnspentOutput[]
+    enableRBF?: boolean
   }): Promise<ToSignData>
 
   createSendMultipleInscriptionsPsbt(data: {
@@ -268,6 +269,7 @@ export interface WalletController {
     inscriptionIds: string[]
     feeRate: number
     btcUtxos: UnspentOutput[]
+    enableRBF?: boolean
   }): Promise<ToSignData>
 
   createSplitInscriptionPsbt(data: {
@@ -275,6 +277,7 @@ export interface WalletController {
     feeRate: number
     outputValue: number
     btcUtxos: UnspentOutput[]
+    enableRBF?: boolean
   }): Promise<ToSignData>
 
   pushTx(rawtx: string): Promise<string>
@@ -470,6 +473,7 @@ export interface WalletController {
     btcUtxos?: UnspentOutput[]
     assetUtxos?: UnspentOutput[]
     outputValue?: number
+    enableRBF?: boolean
   }): Promise<ToSignData>
 
   setAutoLockTimeId(timeId: number): Promise<void>

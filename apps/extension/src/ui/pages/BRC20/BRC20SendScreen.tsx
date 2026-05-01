@@ -6,6 +6,7 @@ import BRC20Preview from '@/ui/components/BRC20Preview';
 import { BRC20Ticker } from '@/ui/components/BRC20Ticker';
 import { FeeRateBar } from '@/ui/components/FeeRateBar';
 import { RefreshButton } from '@/ui/components/RefreshButton';
+import { RBFBar } from '@/ui/components/RBFBar';
 import { TabBar } from '@/ui/components/TabBar';
 import { TickUsdWithoutPrice, TokenType } from '@/ui/components/TickUsd';
 import { fontSizes } from '@/ui/theme/font';
@@ -223,6 +224,14 @@ function Step2({ contextData, updateContextData }: BRC20SendStepParams) {
         </Column>
         <Column>
           <FeeRateBar />
+        </Column>
+        <Column mt="lg">
+          <RBFBar
+            value={contextData.enableRBF}
+            onChange={(val) => {
+              updateContextData({ enableRBF: val });
+            }}
+          />
         </Column>
       </Column>
 

@@ -13,6 +13,7 @@ export async function sendInscriptions({
   networkType,
   changeAddress,
   feeRate,
+  enableRBF = true,
 }: {
   assetUtxos: UnspentOutput[]
   btcUtxos: UnspentOutput[]
@@ -20,6 +21,7 @@ export async function sendInscriptions({
   networkType: NetworkType
   changeAddress: string
   feeRate: number
+  enableRBF?: boolean
 }): Promise<{
   psbt: bitcoin.Psbt
   toSignInputs: any[]
@@ -28,7 +30,7 @@ export async function sendInscriptions({
     throw new WalletError(ErrorCodes.NOT_SAFE_UTXOS)
   }
 
-  const tx = createTx({ networkType, feeRate, changeAddress })
+  const tx = createTx({ networkType, feeRate, changeAddress, enableRBF })
 
   const toSignInputs: ToSignInput[] = []
 

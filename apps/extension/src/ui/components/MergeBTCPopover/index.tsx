@@ -1,4 +1,4 @@
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 
 import {
   useChain,
@@ -18,6 +18,7 @@ import { Button } from '../Button';
 import { Column } from '../Column';
 import { FeeRateBar } from '../FeeRateBar';
 import { Popover } from '../Popover';
+import { RBFBar } from '../RBFBar';
 import { Row } from '../Row';
 import { Text } from '../Text';
 
@@ -42,6 +43,7 @@ export const MergeBTCPopover = ({ onClose }: { onClose: () => void }) => {
   }, []);
 
   const { feeRate } = useFeeRateBar();
+  const [enableRBF, setEnableRBF] = useState(true);
 
   const chain = useChain();
   const nav = useNavigation();
@@ -52,7 +54,8 @@ export const MergeBTCPopover = ({ onClose }: { onClose: () => void }) => {
           address: currentAccount.address
         },
         toAmount: amountToSatoshis(safeBalance),
-        feeRate
+        feeRate,
+        enableRBF
       });
 
       nav.navigate('TxConfirmScreen', { toSignData });
@@ -80,6 +83,7 @@ export const MergeBTCPopover = ({ onClose }: { onClose: () => void }) => {
         </Column>
 
         <FeeRateBar />
+        <RBFBar value={enableRBF} onChange={setEnableRBF} />
 
         <Row full mt="lg">
           <Button

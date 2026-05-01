@@ -170,11 +170,13 @@ export function usePrepareSendOrdinalsInscriptionCallback() {
       inscriptionId,
       feeRate,
       outputValue,
+      enableRBF,
     }: {
       toAddressInfo: ToAddressInfo
       inscriptionId: string
       feeRate?: number
       outputValue?: number
+      enableRBF?: boolean
     }) => {
       if (!feeRate) {
         const summary = await wallet.getFeeSummary()
@@ -192,6 +194,7 @@ export function usePrepareSendOrdinalsInscriptionCallback() {
         feeRate,
         outputValue: outputValue!,
         btcUtxos,
+        enableRBF,
       })
 
       return toSignData
@@ -211,10 +214,12 @@ export function usePrepareSendOrdinalsInscriptionsCallback() {
       toAddressInfo,
       inscriptionIds,
       feeRate,
+      enableRBF,
     }: {
       toAddressInfo: ToAddressInfo
       inscriptionIds: string[]
       feeRate?: number
+      enableRBF?: boolean
     }) => {
       if (!feeRate) {
         const summary = await wallet.getFeeSummary()
@@ -230,6 +235,7 @@ export function usePrepareSendOrdinalsInscriptionsCallback() {
         inscriptionIds,
         feeRate,
         btcUtxos,
+        enableRBF,
       })
 
       return res
@@ -250,10 +256,12 @@ export function useCreateSplitTxCallback() {
       inscriptionId,
       feeRate,
       outputValue,
+      enableRBF,
     }: {
       inscriptionId: string
       feeRate: number
       outputValue: number
+      enableRBF?: boolean
     }) => {
       let btcUtxos = utxos
       if (btcUtxos.length === 0) {
@@ -265,6 +273,7 @@ export function useCreateSplitTxCallback() {
         feeRate,
         outputValue,
         btcUtxos,
+        enableRBF,
       })
 
       return res
@@ -389,12 +398,14 @@ export function usePrepareSendRunesCallback() {
       runeAmount,
       outputValue,
       feeRate,
+      enableRBF,
     }: {
       toAddressInfo: ToAddressInfo
       runeid: string
       runeAmount: string
       outputValue?: number
       feeRate: number
+      enableRBF?: boolean
     }) => {
       if (!feeRate) {
         const summary = await wallet.getFeeSummary()
@@ -419,6 +430,7 @@ export function usePrepareSendRunesCallback() {
         feeRate,
         btcUtxos,
         assetUtxos,
+        enableRBF,
       })
 
       return toSignData

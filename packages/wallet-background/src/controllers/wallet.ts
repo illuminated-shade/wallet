@@ -1362,12 +1362,14 @@ export class WalletController extends BaseController {
     feeRate,
     outputValue,
     btcUtxos,
+    enableRBF = true,
   }: {
     to: string
     inscriptionId: string
     feeRate?: number
     outputValue?: number
     btcUtxos?: txHelpers.UnspentOutput[]
+    enableRBF?: boolean
   }): Promise<ToSignData> => {
     const account = preferenceService.getCurrentAccount()
     if (!account) throw new Error('no current account')
@@ -1405,6 +1407,7 @@ export class WalletController extends BaseController {
       networkType,
       changeAddress: account.address,
       feeRate,
+      enableRBF,
       outputValue: outputValue || assetUtxo.satoshis,
       enableMixed: true,
     })
@@ -1441,12 +1444,14 @@ export class WalletController extends BaseController {
     inscriptionIds,
     feeRate,
     btcUtxos,
+    enableRBF = true,
   }: {
     to: string
     inscriptionIds: string[]
     utxos: UTXO[]
     feeRate: number
     btcUtxos?: txHelpers.UnspentOutput[]
+    enableRBF?: boolean
   }): Promise<ToSignData> => {
     const account = preferenceService.getCurrentAccount()
     if (!account) throw new Error('no current account')
@@ -1492,6 +1497,7 @@ export class WalletController extends BaseController {
       networkType,
       changeAddress: account.address,
       feeRate,
+      enableRBF,
     })
 
     const toSignData = await this.getToSignData({
@@ -1525,12 +1531,14 @@ export class WalletController extends BaseController {
     feeRate,
     outputValue,
     btcUtxos,
+    enableRBF = true,
   }: {
     to: string
     inscriptionId: string
     feeRate: number
     outputValue: number
     btcUtxos?: txHelpers.UnspentOutput[]
+    enableRBF?: boolean
   }): Promise<ToSignData> => {
     const account = preferenceService.getCurrentAccount()
     if (!account) throw new Error('no current account')
@@ -1554,6 +1562,7 @@ export class WalletController extends BaseController {
       networkType,
       changeAddress: account.address,
       feeRate,
+      enableRBF,
       outputValue,
     })
 
@@ -2402,6 +2411,7 @@ export class WalletController extends BaseController {
     btcUtxos,
     assetUtxos,
     outputValue,
+    enableRBF = true,
   }: {
     to: string
     runeid: string
@@ -2410,6 +2420,7 @@ export class WalletController extends BaseController {
     btcUtxos?: UnspentOutput[]
     assetUtxos?: UnspentOutput[]
     outputValue?: number
+    enableRBF?: boolean
   }): Promise<ToSignData> => {
     runeAmount = paramsUtils.formatAmount(runeAmount)
     if (runeAmount === '0') {
@@ -2490,6 +2501,7 @@ export class WalletController extends BaseController {
       runeid,
       runeAmount,
       outputValue: outputValue || UTXO_DUST,
+      enableRBF,
     })
 
     const toSignData = await this.getToSignData({

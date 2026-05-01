@@ -1,6 +1,7 @@
 import { Button, Column, Content, Header, Input, Layout, Row, Text } from '@/ui/components';
 import { FeeRateBar } from '@/ui/components/FeeRateBar';
 import { OutputValueBar } from '@/ui/components/OutputValueBar';
+import { RBFBar } from '@/ui/components/RBFBar';
 import { TickUsdWithoutPrice, TokenType } from '@/ui/components/TickUsd';
 import { colors } from '@/ui/theme/colors';
 import { showLongNumber } from '@/ui/utils';
@@ -21,6 +22,8 @@ export default function SendRunesScreen() {
     defaultOutputValue,
     minOutputValue,
     setOutputValue,
+    enableRBF,
+    setEnableRBF,
     t,
     onClickBack,
     onClickNext
@@ -102,6 +105,9 @@ export default function SendRunesScreen() {
 
         <Column mt="lg">
           <FeeRateBar />
+        </Column>
+        <Column mt="lg">
+          <RBFBar value={enableRBF} onChange={setEnableRBF} />
         </Column>
 
         {error && <Text text={error} color="error" />}

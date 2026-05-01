@@ -22,6 +22,7 @@ export async function sendRunes({
   runeAmount,
   outputValue,
   feeRate,
+  enableRBF = true,
 }: {
   assetUtxos: UnspentOutput[]
   btcUtxos: UnspentOutput[]
@@ -33,6 +34,7 @@ export async function sendRunes({
   runeAmount: string
   outputValue: number
   feeRate: number
+  enableRBF?: boolean
 }) {
   // safe check
   if (utxoHelper.hasInscription(assetUtxos)) {
@@ -43,7 +45,7 @@ export async function sendRunes({
     throw new WalletError(ErrorCodes.NOT_SAFE_UTXOS)
   }
 
-  const tx = createTx({ networkType, feeRate, changeAddress: btcAddress, enableRBF: true })
+  const tx = createTx({ networkType, feeRate, changeAddress: btcAddress, enableRBF })
 
   const toSignInputs: ToSignInput[] = []
 
