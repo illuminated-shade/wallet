@@ -453,7 +453,8 @@ export function usePrepareSendAlkanesCallback() {
       alkaneid: string,
       amount: string,
       feeRate: number,
-      type: 'ft' | 'nft'
+      type: 'ft' | 'nft',
+      enableRBF?: boolean
     ) => {
       return await wallet.createSendAlkanesPsbt({
         to: toAddressInfo.address,
@@ -461,6 +462,7 @@ export function usePrepareSendAlkanesCallback() {
         amount,
         feeRate,
         type,
+        enableRBF,
       })
     },
     [wallet, account]

@@ -3281,12 +3281,14 @@ export class WalletController extends BaseController {
     amount,
     feeRate,
     type,
+    enableRBF = true,
   }: {
     to: string
     alkaneid: string
     amount: string
     feeRate: number
     type: 'ft' | 'nft'
+    enableRBF?: boolean
   }): Promise<ToSignData> => {
     amount = paramsUtils.formatAmount(amount)
 
@@ -3300,6 +3302,7 @@ export class WalletController extends BaseController {
       alkaneid,
       amount,
       feeRate,
+      enableRBF,
     })
 
     const toSignData = await this.getToSignData({

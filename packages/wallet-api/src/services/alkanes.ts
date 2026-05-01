@@ -82,6 +82,7 @@ export class AlkanesService {
     alkaneid,
     amount,
     feeRate,
+    enableRBF = true,
   }: {
     userAddress: string
     userPubkey: string
@@ -89,6 +90,7 @@ export class AlkanesService {
     alkaneid: string
     amount: string
     feeRate: number
+    enableRBF?: boolean
   }): Promise<{
     orderId: string
     psbtHex: string
@@ -101,6 +103,7 @@ export class AlkanesService {
       alkaneid,
       amount,
       feeRate,
+      enableRBF,
     })
   }
 }

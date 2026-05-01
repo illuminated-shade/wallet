@@ -663,6 +663,7 @@ export interface WalletController {
     amount: string
     feeRate: number
     type: 'ft' | 'nft'
+    enableRBF?: boolean
   }): Promise<ToSignData>
 
   getAlkanesCollectionList(

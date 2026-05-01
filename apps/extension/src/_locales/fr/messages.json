@@ -1797,7 +1797,7 @@
     "message": "RBF"
   },
   "rbf_tip": {
-    "message": "Une fonctionnalité permet de remplacer la transaction."
+    "message": "Marque cette transaction non confirmée comme remplaçable (RBF), afin que vous puissiez la retenter avec des frais plus élevés. Cette fonctionnalité n'est pas garantie et dépend de la politique du réseau."
   },
   "receive": {
     "message": "Recevoir"
