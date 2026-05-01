@@ -2,6 +2,7 @@ import { IMAGE_SOURCE_MAP } from '@/shared/constant';
 import { Button, Card, Column, Content, Header, Icon, Image, Input, Layout, Row, Text, Tooltip } from '@/ui/components';
 import { BtcUsd } from '@/ui/components/BtcUsd';
 import { FeeRateBar } from '@/ui/components/FeeRateBar';
+import { RBFBar } from '@/ui/components/RBFBar';
 import { colors } from '@/ui/theme/colors';
 import { fontSizes } from '@/ui/theme/font';
 import { useNavigation, useTxCreateScreenLogic } from '@unisat/wallet-state';
@@ -19,6 +20,8 @@ export default function TxCreateScreen() {
     inputAmount,
     onAmountInputChange,
     onAmountMaxClick,
+    enableRBF,
+    onRBFChange,
 
     showUnavailable,
     availableAmount,
@@ -161,10 +164,18 @@ export default function TxCreateScreen() {
         <Column mt="lg">
           <FeeRateBar />
         </Column>
+        <Column mt="lg">
+          <RBFBar value={enableRBF} onChange={onRBFChange} />
+        </Column>
 
         {error && <Text text={error} color="error" />}
 
-        <Button disabled={disabled} preset="primary" text={t('next')} onClick={onClickNext} data-testid="tx-next-button"></Button>
+        <Button
+          disabled={disabled}
+          preset="primary"
+          text={t('next')}
+          onClick={onClickNext}
+          data-testid="tx-next-button"></Button>
       </Content>
     </Layout>
   );

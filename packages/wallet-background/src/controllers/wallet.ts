@@ -1209,6 +1209,7 @@ export class WalletController extends BaseController {
     amount,
     feeRate,
     btcUtxos,
+    enableRBF = true,
     memo,
     memos,
   }: {
@@ -1216,6 +1217,7 @@ export class WalletController extends BaseController {
     amount: number
     feeRate?: number
     btcUtxos?: UnspentOutput[]
+    enableRBF?: boolean
     memo?: string
     memos?: string[]
   }): Promise<{
@@ -1252,6 +1254,7 @@ export class WalletController extends BaseController {
       networkType,
       changeAddress: account.address,
       feeRate: feeRate!,
+      enableRBF,
       memo: memo!,
       memos: memos!,
     })
@@ -1289,10 +1292,12 @@ export class WalletController extends BaseController {
     to,
     feeRate,
     btcUtxos,
+    enableRBF = true,
   }: {
     to: string
     feeRate: number
     btcUtxos?: UnspentOutput[]
+    enableRBF?: boolean
   }): Promise<{
     psbtHex: string
     toSignInputs: ToSignInput[]
@@ -1315,6 +1320,7 @@ export class WalletController extends BaseController {
       toAddress: to,
       networkType,
       feeRate,
+      enableRBF,
     })
 
     let totalInput = 0

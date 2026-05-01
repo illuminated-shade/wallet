@@ -48,14 +48,17 @@ export function useUpdateUiTxCreateScreen() {
   return ({
     toInfo,
     inputAmount,
+    enableRBF,
   }: {
     toInfo?: { address: string; domain: string; inscription?: Inscription }
     inputAmount?: string
+    enableRBF?: boolean
   }) => {
     dispatch(
       (uiActions as any).updateTxCreateScreen({
         toInfo,
         inputAmount,
+        enableRBF,
       })
     )
   }

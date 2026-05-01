@@ -35,6 +35,7 @@ export function usePrepareSendBTCCallback() {
       memo,
       memos,
       disableAutoAdjust,
+      enableRBF,
     }: {
       toAddressInfo: ToAddressInfo
       toAmount: number
@@ -42,6 +43,7 @@ export function usePrepareSendBTCCallback() {
       memo?: string
       memos?: string[]
       disableAutoAdjust?: boolean
+      enableRBF?: boolean
     }) => {
       let _utxos: UnspentOutput[] = utxos
       if (_utxos.length === 0) {
@@ -65,6 +67,7 @@ export function usePrepareSendBTCCallback() {
           to: toAddressInfo.address,
           btcUtxos: _utxos,
           feeRate,
+          enableRBF,
         })
       } else {
         res = await wallet.createSendBTCPsbt({
@@ -72,6 +75,7 @@ export function usePrepareSendBTCCallback() {
           amount: toAmount,
           btcUtxos: _utxos,
           feeRate,
+          enableRBF,
           memo: memo!,
           memos: memos!,
         })

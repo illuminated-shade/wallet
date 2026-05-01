@@ -32,6 +32,7 @@ export function useTxCreateScreenLogic() {
 
   const toInfo = uiState.toInfo
   const inputAmount = uiState.inputAmount
+  const enableRBF = uiState.enableRBF
   const feeRate = feeRateBarState.feeRate
 
   const [error, setError] = useState('')
@@ -118,8 +119,12 @@ export function useTxCreateScreenLogic() {
     setUiState({ inputAmount: availableAmount.toString() })
   }
 
+  const onRBFChange = (value: boolean) => {
+    setUiState({ enableRBF: value })
+  }
+
   const onClickNext = () => {
-    prepareSendBTC({ toAddressInfo: toInfo, toAmount: toSatoshis, feeRate })
+    prepareSendBTC({ toAddressInfo: toInfo, toAmount: toSatoshis, feeRate, enableRBF })
       .then(toSignData => {
         nav.navigate('TxConfirmScreen', {
           toSignData,
@@ -142,6 +147,8 @@ export function useTxCreateScreenLogic() {
     inputAmount,
     onAmountInputChange,
     onAmountMaxClick,
+    enableRBF,
+    onRBFChange,
 
     showUnavailable,
     availableAmount,

@@ -32,6 +32,7 @@ export interface UIState {
       inscription?: Inscription
     }
     inputAmount: string
+    enableRBF: boolean
   }
   addressInput: {
     address: string
@@ -73,6 +74,7 @@ export const initialState: UIState = {
       domain: '',
     },
     inputAmount: '',
+    enableRBF: true,
   },
   addressInput: {
     address: '',
@@ -149,6 +151,7 @@ const slice: Slice<UIState> = createSlice({
             inscription?: Inscription
           }
           inputAmount?: string
+          enableRBF?: boolean
         }
       }
     ) {
@@ -157,6 +160,9 @@ const slice: Slice<UIState> = createSlice({
       }
       if (action.payload.inputAmount !== undefined) {
         state.uiTxCreateScreen.inputAmount = action.payload.inputAmount
+      }
+      if (action.payload.enableRBF !== undefined) {
+        state.uiTxCreateScreen.enableRBF = action.payload.enableRBF
       }
 
       state.uiTxCreateScreen = { ...state.uiTxCreateScreen }
@@ -289,6 +295,8 @@ const slice: Slice<UIState> = createSlice({
       }
       if (!state.uiTxCreateScreen) {
         state.uiTxCreateScreen = initialState.uiTxCreateScreen
+      } else if (state.uiTxCreateScreen.enableRBF === undefined) {
+        state.uiTxCreateScreen.enableRBF = true
       }
       if (!state.feeRateBar) {
         state.feeRateBar = initialState.feeRateBar

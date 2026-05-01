@@ -243,6 +243,7 @@ export interface WalletController {
     amount: number
     btcUtxos: UnspentOutput[]
     feeRate: number
+    enableRBF?: boolean
     memo?: string
     memos?: string[]
   }): Promise<ToSignData>
@@ -251,6 +252,7 @@ export interface WalletController {
     to: string
     btcUtxos: UnspentOutput[]
     feeRate: number
+    enableRBF?: boolean
   }): Promise<ToSignData>
 
   createSendInscriptionPsbt(data: {
