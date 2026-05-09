@@ -1,5 +1,6 @@
 import { Button, Column, Content, Header, Input, Layout, Row, Text } from '@/ui/components';
 import { FeeRateBar } from '@/ui/components/FeeRateBar';
+import { RBFBar } from '@/ui/components/RBFBar';
 import { TickUsdWithoutPrice, TokenType } from '@/ui/components/TickUsd';
 import { colors } from '@/ui/theme/colors';
 import { showLongNumber } from '@/ui/utils';
@@ -18,10 +19,12 @@ export default function SendAlkanesScreen() {
     availableBalanceStr,
 
     inputAmount,
+    enableRBF,
     disabled,
     error,
     setToInfo,
     setInputAmount,
+    setEnableRBF,
     onClickBack,
     onClickNext,
     onSignPsbtHandleConfirm,
@@ -100,6 +103,9 @@ export default function SendAlkanesScreen() {
 
         <Column mt="lg">
           <FeeRateBar />
+        </Column>
+        <Column mt="lg">
+          <RBFBar value={enableRBF} onChange={setEnableRBF} />
         </Column>
 
         {error && <Text text={error} color="error" />}

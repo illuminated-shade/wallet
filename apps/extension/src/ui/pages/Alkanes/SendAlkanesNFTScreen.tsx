@@ -1,6 +1,7 @@
 import { Button, Column, Content, Header, Input, Layout, Row, Text } from '@/ui/components';
 import AlkanesNFTPreview from '@/ui/components/AlkanesNFTPreview';
 import { FeeRateBar } from '@/ui/components/FeeRateBar';
+import { RBFBar } from '@/ui/components/RBFBar';
 import { SendAlkanesNFTScreenStep, useSendAlkanesNFTScreenLogic } from '@unisat/wallet-state';
 
 import { SignPsbt } from '../Approval/components';
@@ -11,9 +12,11 @@ export default function SendAlkanesNFTScreen() {
     t,
     alkanesInfo,
     toInfo,
+    enableRBF,
     disabled,
     error,
     setToInfo,
+    setEnableRBF,
     onCreateTxHandleConfirm,
     onCreateTxHandleBack,
 
@@ -56,6 +59,9 @@ export default function SendAlkanesNFTScreen() {
 
         <Column mt="lg">
           <FeeRateBar />
+        </Column>
+        <Column mt="lg">
+          <RBFBar value={enableRBF} onChange={setEnableRBF} />
         </Column>
 
         {error && <Text text={error} color="error" />}
