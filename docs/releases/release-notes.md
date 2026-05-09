@@ -1,5 +1,23 @@
 # UniSat Wallet Release Notes
 
+## v1.7.14
+
+### Improvements
+
+- Updated `unisat.deriveContextHash` derivation semantics to bind output to the connected leaf public key (per-address), and added interface-level support updates for the new behavior.
+- Added a persisted global RBF preference across supported send flows, so BTC/BRC20/Runes/Ordinals send paths share one remembered RBF toggle state.
+
+### Bug Fixes
+
+- Fixed notification-service test typing incompatibilities by aligning test fixtures with the current `StoredNotification` contract (including required `linkType`).
+
+## Unreleased
+
+### Breaking Changes (Experimental API)
+
+- **`unisat.deriveContextHash` derivation input changed (spec v1.0 → v2.0).** HD wallets still use the fixed BIP-32 path `m/73681862'` as IKM, while imported wallets still use the raw imported private key. v2.0 now injects the wallet's canonical Bitcoin network and the currently connected compressed public key into HKDF `info`, so switching network or connected account produces a different output. dApps do not need to encode the wallet network or public key in `context`.
+- **Outputs change for any prior caller.** Any dApp that persisted v1.0 outputs (e.g. an HTLC pre-image, a Lamport seed) must re-derive against v2.0 — there is no version-discovery mechanism. The API remains marked `@experimental`. See [`../api/derive-context-hash.md`](../api/derive-context-hash.md) for the updated contract.
+
 ## v1.7.13
 
 ### Improvements
