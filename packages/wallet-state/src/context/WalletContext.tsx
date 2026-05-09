@@ -640,7 +640,8 @@ export interface WalletController {
 
   createSendBTCOffsetPsbt(
     tos: { address: string; satoshis: number }[],
-    feeRate: number
+    feeRate: number,
+    enableRBF?: boolean
   ): Promise<ToSignData>
 
   getAlkanesList(

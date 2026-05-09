@@ -95,10 +95,12 @@ export function usePrepareSendBypassHeadOffsetsCallback() {
       toAddressInfo,
       toAmount,
       feeRate,
+      enableRBF,
     }: {
       toAddressInfo: ToAddressInfo
       toAmount: number
       feeRate: number
+      enableRBF?: boolean
     }) => {
       const res = await wallet.createSendBTCOffsetPsbt(
         [
@@ -107,7 +109,8 @@ export function usePrepareSendBypassHeadOffsetsCallback() {
             satoshis: toAmount,
           },
         ],
-        feeRate
+        feeRate,
+        enableRBF
       )
       return res
     },

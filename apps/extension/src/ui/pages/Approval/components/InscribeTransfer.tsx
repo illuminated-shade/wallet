@@ -21,6 +21,7 @@ import { Empty } from '@/ui/components/Empty';
 import { FeeRateBar } from '@/ui/components/FeeRateBar';
 import InscriptionPreview from '@/ui/components/InscriptionPreview';
 import { OutputValueBar } from '@/ui/components/OutputValueBar';
+import { RBFBar } from '@/ui/components/RBFBar';
 import { TickUsdWithoutPrice, TokenType } from '@/ui/components/TickUsd';
 import WebsiteBar from '@/ui/components/WebsiteBar';
 import { fontSizes } from '@/ui/theme/font';
@@ -72,6 +73,7 @@ interface ContextData {
   isApproval: boolean;
   tokenInfo?: TokenInfo;
   amountEditable?: boolean;
+  enableRBF: boolean;
 }
 
 interface UpdateContextDataParams {
@@ -84,6 +86,7 @@ interface UpdateContextDataParams {
   amount?: string;
   tokenInfo?: TokenInfo;
   amountEditable?: boolean;
+  enableRBF?: boolean;
 }
 
 export default function InscribeTransfer({ params: { data, session } }: Props) {
@@ -92,7 +95,8 @@ export default function InscribeTransfer({ params: { data, session } }: Props) {
     ticker: data.ticker,
     amount: data.amount,
     session,
-    isApproval: true
+    isApproval: true,
+    enableRBF: true
   });
   const updateContextData = useCallback(
     (params: UpdateContextDataParams) => {
@@ -141,6 +145,8 @@ function Step1(params: BRC20InscribeTransferParams) {
     defaultOutputValue,
     setOutputValue,
     disabled,
+    enableRBF,
+    setEnableRBF,
     loadingOnly,
     handleCancel
   } = useBRC20InscribeTransferLogicStep1(params);
@@ -250,6 +256,10 @@ function Step1(params: BRC20InscribeTransferParams) {
 
             <Column>
               <FeeRateBar />
+            </Column>
+
+            <Column>
+              <RBFBar value={enableRBF} onChange={setEnableRBF} />
             </Column>
           </Column>
         </Column>

@@ -3204,7 +3204,8 @@ export class WalletController extends BaseController {
 
   createSendBTCOffsetPsbt = async (
     tos: { address: string; satoshis: number }[],
-    feeRate: number
+    feeRate: number,
+    enableRBF = true
   ): Promise<ToSignData> => {
     const currentAccount = await this.getCurrentAccount()
     if (!currentAccount) throw new Error('no current account')
@@ -3214,7 +3215,8 @@ export class WalletController extends BaseController {
         currentAccount.address,
         currentAccount.pubkey,
         tos,
-        feeRate
+        feeRate,
+        enableRBF
       )
 
     const psbt = bitcoin.Psbt.fromBase64(psbtBase64)
