@@ -133,6 +133,22 @@ pnpm build:chrome:mv3:dev
 
 ```
 
+### Optional: Enforce extension `tsc --noEmit` on push
+
+Install repository hooks once:
+
+```bash
+bash scripts/install-hooks.sh
+```
+
+This enables a local `pre-push` hook that runs:
+
+```bash
+cd apps/extension && tsc --noEmit
+```
+
+The check is triggered only when pushed commits include changes under `apps/extension/**`.
+
 ---
 
 ## Project Principles
