@@ -9,6 +9,10 @@ export enum ErrorCodes {
   INSUFFICIENT_FEE_UTXO = -7,
   METHOD_NOT_FOUND = -32601,
   UserCancel = 4001,
+  // Wallet's current Bitcoin network is not one of the canonical networks
+  // accepted by deriveContextHash. EIP-1193 reserves 4901 for "Chain
+  // Disconnected" — closest standard analog.
+  UNSUPPORTED_NETWORK = 4901,
 }
 
 export const ErrorMessages: {
@@ -22,6 +26,7 @@ export const ErrorMessages: {
   [ErrorCodes.INSUFFICIENT_FEE_UTXO]: 'code_insufficient_fee_utxo',
   [ErrorCodes.METHOD_NOT_FOUND]: 'code_method_not_found',
   [ErrorCodes.UserCancel]: 'user_rejected_the_request',
+  [ErrorCodes.UNSUPPORTED_NETWORK]: 'code_unsupported_network',
 }
 
 export class WalletError extends Error {

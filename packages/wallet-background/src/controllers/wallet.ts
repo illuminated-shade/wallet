@@ -40,6 +40,7 @@ import {
   CosmosBalance,
   CosmosSignDataType,
   DummyTxType,
+  ErrorCodes,
   LocalPsbtSummary,
   PlatformEnv,
   PsbtActionDetailType,
@@ -56,6 +57,7 @@ import {
   ToSignData,
   ToSignMessage,
   UTXO,
+  WalletError,
   WalletKeyring,
   bgI18n,
   getLockTimeInfo,
@@ -93,6 +95,23 @@ export type AccountAsset = {
   symbol: string
   amount: string
   value: string
+}
+
+export const chainTypeToCanonicalNetwork = (chainType: ChainType): string => {
+  switch (chainType) {
+    case ChainType.BITCOIN_MAINNET:
+      return 'bitcoin-mainnet'
+    case ChainType.BITCOIN_TESTNET:
+    case ChainType.BITCOIN_TESTNET4:
+      return 'bitcoin-testnet'
+    case ChainType.BITCOIN_SIGNET:
+      return 'bitcoin-signet'
+    default:
+      throw new WalletError(
+        ErrorCodes.UNSUPPORTED_NETWORK,
+        `wallet chain "${chainType}" is not supported by deriveContextHash`,
+      )
+  }
 }
 
 const caculateTapLeafHash = (input: any, pubkey: Buffer) => {
@@ -1014,11 +1033,14 @@ export class WalletController extends BaseController {
   deriveContextHash = async (appName: string, context: string): Promise<string> => {
     const account = preferenceService.getCurrentAccount()
     if (!account) throw new Error('no current account')
+    // chainTypeToCanonicalNetwork throws WalletError(UNSUPPORTED_NETWORK) for
+    // Fractal / unmapped chains; surface it unchanged to the dApp.
+    const canonicalNetwork = chainTypeToCanonicalNetwork(preferenceService.getChainType())
     const keyring = await keyringService.getKeyringForAccount(account.pubkey, account.type)
     if (!keyring.deriveContextHash) {
       throw new Error('Current keyring does not support deriveContextHash')
     }
-    return keyring.deriveContextHash(account.pubkey, appName, context)
+    return keyring.deriveContextHash(account.pubkey, appName, canonicalNetwork, context)
   }
 
   addContact = (data: ContactBookItem) => {

@@ -2084,6 +2084,12 @@
   "derive_context_hash_app_name": {
     "message": "Aplicación"
   },
+  "derive_context_hash_account": {
+    "message": "Cuenta"
+  },
+  "derive_context_hash_network": {
+    "message": "Red"
+  },
   "derive_context_hash_context": {
     "message": "Contexto"
   },

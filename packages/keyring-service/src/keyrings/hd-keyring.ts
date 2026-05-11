@@ -268,19 +268,26 @@ export class HdKeyring extends SimpleKeyring {
    * Derive a deterministic context hash from the wallet's key material.
    * Uses BIP-32 derivation at m/73681862' from the HD wallet root.
    *
-   * @param _publicKey - Unused for HD keyrings (derivation is from root).
-   * @param appName - Application identifier.
-   * @param context - Hex-encoded context string.
+   * @param publicKey            - The connected pubkey (66-char compressed hex) to inject into HKDF info per spec v2.0.
+   * @param appName              - Application identifier.
+   * @param canonicalNetworkName - Canonical Bitcoin network name (e.g. "bitcoin-mainnet").
+   * @param context              - Hex-encoded context string.
    */
-  override async deriveContextHash(_publicKey: string, appName: string, context: string): Promise<string> {
+  override async deriveContextHash(
+    publicKey: string,
+    appName: string,
+    canonicalNetworkName: string,
+    context: string,
+  ): Promise<string> {
     const contextBytes = parseHexContext(context)
+    const pubkeyBytes = Uint8Array.from(Buffer.from(publicKey, 'hex'))
     if (!this.hdWallet) {
       throw new Error('deriveContextHash requires a mnemonic or xpriv-based keyring')
     }
     const child = this.hdWallet.derive(DERIVE_CONTEXT_HASH_PATH)
     const privKeyBytes = new Uint8Array(child.privateKey)
     try {
-      return deriveContextHash(privKeyBytes, appName, contextBytes)
+      return deriveContextHash(privKeyBytes, appName, canonicalNetworkName, pubkeyBytes, contextBytes)
     } finally {
       privKeyBytes.fill(0)
       // Zero the original BIP-32 node's key buffer as well

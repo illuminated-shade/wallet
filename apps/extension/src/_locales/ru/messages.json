@@ -2084,6 +2084,12 @@
   "derive_context_hash_app_name": {
     "message": "Приложение"
   },
+  "derive_context_hash_account": {
+    "message": "Аккаунт"
+  },
+  "derive_context_hash_network": {
+    "message": "Сеть"
+  },
   "derive_context_hash_context": {
     "message": "Контекст"
   },

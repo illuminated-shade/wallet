@@ -2087,6 +2087,12 @@
   "derive_context_hash_app_name": {
     "message": "應用程式"
   },
+  "derive_context_hash_account": {
+    "message": "帳戶"
+  },
+  "derive_context_hash_network": {
+    "message": "網路"
+  },
   "derive_context_hash_context": {
     "message": "上下文"
   },
