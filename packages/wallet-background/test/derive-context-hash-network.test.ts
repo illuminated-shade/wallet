@@ -2,7 +2,7 @@ import { ErrorCodes, WalletError } from '@unisat/wallet-shared'
 import { ChainType } from '@unisat/wallet-types'
 import { describe, expect, it } from 'vitest'
 
-import { chainTypeToCanonicalNetwork } from '../src/controllers/wallet'
+import { chainTypeToCanonicalNetwork } from '../src/shared/utils/deriveContextHash'
 
 describe('chainTypeToCanonicalNetwork', () => {
   it('maps mainnet', () => {

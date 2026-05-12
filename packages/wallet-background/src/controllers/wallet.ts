@@ -40,7 +40,6 @@ import {
   CosmosBalance,
   CosmosSignDataType,
   DummyTxType,
-  ErrorCodes,
   LocalPsbtSummary,
   PlatformEnv,
   PsbtActionDetailType,
@@ -57,7 +56,6 @@ import {
   ToSignData,
   ToSignMessage,
   UTXO,
-  WalletError,
   WalletKeyring,
   bgI18n,
   getLockTimeInfo,
@@ -74,6 +72,7 @@ import {
   walletApiService,
 } from '../services'
 import { getChainInfo } from '../shared/utils'
+import { chainTypeToCanonicalNetwork } from '../shared/utils/deriveContextHash'
 import { bgEventBus } from '../utils/eventBus'
 import { getEstimateFee, psbtFromString } from '../utils/psbt-utils'
 
@@ -95,23 +94,6 @@ export type AccountAsset = {
   symbol: string
   amount: string
   value: string
-}
-
-export const chainTypeToCanonicalNetwork = (chainType: ChainType): string => {
-  switch (chainType) {
-    case ChainType.BITCOIN_MAINNET:
-      return 'bitcoin-mainnet'
-    case ChainType.BITCOIN_TESTNET:
-    case ChainType.BITCOIN_TESTNET4:
-      return 'bitcoin-testnet'
-    case ChainType.BITCOIN_SIGNET:
-      return 'bitcoin-signet'
-    default:
-      throw new WalletError(
-        ErrorCodes.UNSUPPORTED_NETWORK,
-        `wallet chain "${chainType}" is not supported by deriveContextHash`,
-      )
-  }
 }
 
 const caculateTapLeafHash = (input: any, pubkey: Buffer) => {
