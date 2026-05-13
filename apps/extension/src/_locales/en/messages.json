@@ -1803,7 +1803,7 @@
     "message": "RBF"
   },
   "rbf_tip": {
-    "message": "Marks this unconfirmed transaction as replaceable (RBF), so you can retry it with a higher fee. This feature is not guaranteed and depends on network policy."
+    "message": "RBF marks this unconfirmed transaction as replaceable so you can retry it with a higher fee. Even if RBF is turned off, the transaction may still be replaceable depending on network policy."
   },
   "receive": {
     "message": "Receive"

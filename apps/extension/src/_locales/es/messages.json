@@ -1797,7 +1797,7 @@
     "message": "RBF"
   },
   "rbf_tip": {
-    "message": "Marca esta transacción no confirmada como reemplazable (RBF), para que puedas volver a intentarla con una comisión más alta. Esta función no está garantizada y depende de la política de la red."
+    "message": "RBF marca esta transacción no confirmada como reemplazable para que puedas volver a intentarla con una comisión más alta. Incluso si RBF está desactivado, la transacción aún puede ser reemplazable según la política de la red."
   },
   "receive": {
     "message": "Recibir"
