@@ -73,14 +73,14 @@ export default function SendAlkanesScreen() {
               onAddressInputChange={(val) => {
                 setToInfo(val);
               }}
-              recipientLabel={<Text text={t('recipient')} preset="regular" color="textDim" />}
+              recipientLabel={<Text text={t('recipient')} preset="regular" />}
               autoFocus={true}
             />
           </Column>
 
           <Column mt="lg">
             <Row justifyBetween>
-              <Text text={t('balance')} color="textDim" />
+              <Text text={t('balance')} preset="regular" />
               <TickUsdWithoutPrice tick={tokenBalance.name} balance={inputAmount} type={TokenType.RUNES} />
               <Row
                 itemsCenter

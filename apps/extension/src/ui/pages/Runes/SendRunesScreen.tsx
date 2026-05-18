@@ -59,7 +59,7 @@ export default function SendRunesScreen() {
               onAddressInputChange={(val) => {
                 setToInfo(val);
               }}
-              recipientLabel={<Text text={t('recipient')} preset="regular" color="textDim" />}
+              recipientLabel={<Text text={t('recipient')} preset="regular" />}
               autoFocus={true}
               data-testid="send-runes-address-input"
             />
@@ -67,7 +67,7 @@ export default function SendRunesScreen() {
 
           <Column mt="lg">
             <Row justifyBetween>
-              <Text text={t('balance')} color="textDim" />
+              <Text text={t('balance')} preset="regular" />
               <TickUsdWithoutPrice tick={runeInfo.spacedRune} balance={inputAmount} type={TokenType.RUNES} />
               <Row
                 itemsCenter
@@ -92,7 +92,7 @@ export default function SendRunesScreen() {
 
           {toInfo.address ? (
             <Column mt="lg">
-              <Text text={t('output_value')} color="textDim" />
+              <Text text={t('output_value')} preset="regular" />
 
               <OutputValueBar
                 defaultValue={defaultOutputValue}
@@ -113,7 +113,12 @@ export default function SendRunesScreen() {
 
           {error && <Text text={error} color="error" />}
 
-          <Button disabled={disabled} preset="primary" text={t('next')} onClick={onClickNext} data-testid="send-runes-next-button"></Button>
+          <Button
+            disabled={disabled}
+            preset="primary"
+            text={t('next')}
+            onClick={onClickNext}
+            data-testid="send-runes-next-button"></Button>
         </Column>
       </Content>
     </Layout>

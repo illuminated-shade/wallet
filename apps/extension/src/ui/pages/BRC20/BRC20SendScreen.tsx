@@ -39,7 +39,7 @@ function Step1({ contextData, updateContextData }: BRC20SendStepParams) {
             <TransferableList contextData={contextData} updateContextData={updateContextData} />
           </Column>
 
-          <Row justifyCenter mt="xxl">
+          <Row justifyCenter>
             <Column style={{ width: '100%' }}>
               <InscribeTransferButton tokenBalance={tokenBalance} />
             </Column>
@@ -81,7 +81,7 @@ const InscribeTransferButton = ({ tokenBalance }: { tokenBalance: TokenBalance }
             </div>
           </Row>
           <Row style={{ width: '100%' }} justifyBetween>
-            <Text text={t('available')} color="textDim" size="sm" />
+            <Text text={t('available')} preset="regular" size="sm" />
             <Row itemsCenter gap="sm">
               <Text text={`${tokenBalance.availableBalanceSafe}  `} color="white" preset="bold" digital />
               {!isSafeBalanceZero && (
@@ -196,7 +196,7 @@ function Step2({ contextData, updateContextData }: BRC20SendStepParams) {
       <Column full>
         <Column>
           <Row justifyBetween>
-            <Text text={t('send')} color="textDim" />
+            <Text text={t('send')} preset="regular" />
             <TickUsdWithoutPrice
               tick={contextData.tokenBalance.ticker}
               balance={contextData.transferAmount}

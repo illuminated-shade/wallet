@@ -1650,7 +1650,7 @@
     "message": "Others"
   },
   "output_value": {
-    "message": "output value"
+    "message": "Output value"
   },
   "output_value_must_be_at_least": {
     "message": "OutputValue must be at least"

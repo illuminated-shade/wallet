@@ -27,7 +27,8 @@ import WebsiteBar from '@/ui/components/WebsiteBar';
 import { fontSizes } from '@/ui/theme/font';
 import { spacing } from '@/ui/theme/spacing';
 import { amountToSatoshis } from '@/ui/utils';
-import { RawTxInfo } from '@unisat/wallet-shared';
+import { paramsUtils } from '@unisat/base-utils';
+import { InscribeOrder, RawTxInfo, TokenBalance, TokenInfo } from '@unisat/wallet-shared';
 import {
   BRC20InscribeTransferParams,
   useBRC20InscribeTransferLogic,
@@ -37,8 +38,6 @@ import {
   useBRC20InscribeTransferLogicStep4
 } from '@unisat/wallet-state';
 
-import { paramsUtils } from '@unisat/base-utils';
-import { InscribeOrder, TokenBalance, TokenInfo } from '@unisat/wallet-shared';
 import SignPsbt from './SignPsbt';
 
 interface Props {
@@ -173,7 +172,7 @@ function Step1(params: BRC20InscribeTransferParams) {
 
             <Column>
               <Row justifyBetween itemsCenter>
-                <Text text={t('available')} color="textDim" />
+                <Text text={t('available')} preset="regular" />
                 <TickUsdWithoutPrice tick={contextData.ticker} balance={inputAmount} type={TokenType.BRC20} />
                 {tokenBalance ? (
                   <Column>
@@ -243,7 +242,7 @@ function Step1(params: BRC20InscribeTransferParams) {
             </Column>
 
             <Column mt="lg">
-              <Text text={t('output_value')} color="textDim" />
+              <Text text={t('output_value')} preset="regular" />
 
               <OutputValueBar
                 defaultValue={defaultOutputValue}

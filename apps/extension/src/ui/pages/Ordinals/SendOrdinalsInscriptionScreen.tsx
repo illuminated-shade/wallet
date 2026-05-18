@@ -26,7 +26,7 @@ export default function SendOrdinalsInscriptionScreen() {
       <Header onBack={onClickBack} title={t('send_inscription2')} />
       <Content>
         <Column>
-          <Text text={`${t('ordinals_inscriptions')} (${inscriptions.length})`} color="textDim" />
+          <Text text={`${t('ordinals_inscriptions')} (${inscriptions.length})`} preset="regular" />
           <Row justifyBetween>
             <Row overflowX gap="md" pb="md">
               {inscriptions.map((v) => (
@@ -40,13 +40,13 @@ export default function SendOrdinalsInscriptionScreen() {
             addressInputData={toInfo}
             autoFocus={true}
             onAddressInputChange={(val) => onAddressInputChange(val)}
-            recipientLabel={<Text text={t('recipient')} color="textDim" />}
+            recipientLabel={<Text text={t('recipient')} preset="regular" />}
             data-testid="send-inscription-address-input"
           />
 
           {toInfo.address ? (
             <Column mt="lg">
-              <Text text={t('output_value')} color="textDim" />
+              <Text text={t('output_value')} preset="regular" />
 
               <OutputValueBar
                 defaultValue={Math.max(defaultOutputValue, 546)}
@@ -66,7 +66,13 @@ export default function SendOrdinalsInscriptionScreen() {
           </Column>
 
           {error && <Text text={error} color="error" />}
-          <Button disabled={disabled} preset="primary" text={t('next')} onClick={onClickNext} data-testid="send-inscription-next-button" />
+          <Button
+            disabled={disabled}
+            preset="primary"
+            text={t('next')}
+            onClick={onClickNext}
+            data-testid="send-inscription-next-button"
+          />
         </Column>
       </Content>
     </Layout>

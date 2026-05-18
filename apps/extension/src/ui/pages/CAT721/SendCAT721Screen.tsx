@@ -88,7 +88,7 @@ export default function SendCAT721Screen() {
                 setToInfo(val);
               }}
               autoFocus={true}
-              recipientLabel={<Text text={t('recipient')} preset="regular" color="textDim" />}
+              recipientLabel={<Text text={t('recipient')} preset="regular" />}
             />
           </Column>
 

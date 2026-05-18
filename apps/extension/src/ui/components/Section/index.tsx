@@ -1,8 +1,8 @@
 import { copyToClipboard, shortAddress } from '@/ui/utils';
 import { CopyOutlined } from '@ant-design/icons';
 import { useI18n } from '@unisat/wallet-state';
-
 import { useTools } from '@unisat/wallet-state';
+
 import { Row } from '../Row';
 import { Text } from '../Text';
 
@@ -37,7 +37,7 @@ export function Section({
       style={{
         minHeight: 25
       }}>
-      <Text text={title} preset="sub" />
+      <Text text={title} preset="regular" />
       {rightComponent ? (
         rightComponent
       ) : (
