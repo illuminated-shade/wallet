@@ -1,5 +1,22 @@
 # UniSat Wallet Release Notes
 
+## v1.7.15
+
+### New Features
+
+- Added a disclaimer prompt for selected Discover apps before opening them.
+
+### Improvements
+
+- Improved RBF tooltip wording across supported languages to clarify that replaceability can still depend on network policy.
+- Polished send form layouts across BTC, Runes, CAT20, CAT721, Alkanes, and Ordinals flows so labels align consistently and action buttons keep stable sizing.
+- Truncated long account names in the account switcher to avoid layout overflow.
+
+### Bug Fixes
+
+- Fixed BRC20 inscribe transfer flow so successful PSBT broadcast continues into the confirmation/result step instead of navigating away early.
+- Added a distinct `NO_ACCOUNT` provider error code when the wallet has no account, avoiding incorrect classification as user cancellation.
+
 ## v1.7.14
 
 ### Improvements
