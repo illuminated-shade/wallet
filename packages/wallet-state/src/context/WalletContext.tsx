@@ -17,6 +17,7 @@ import {
   AlkanesInfo,
   Announcement,
   AppInfo,
+  AppExtra,
   AppSummary,
   BRC20HistoryItem,
   BabylonAddressSummary,
@@ -532,6 +533,7 @@ export interface WalletController {
   getMergeCAT20Status(version: 'v1' | 'v2', mergeId: string): Promise<any>
 
   getAppList(): Promise<{ tab: string; items: AppInfo[] }[]>
+  getAppExtra(id: string | number, locale?: string): Promise<AppExtra>
   getBannerList(): Promise<{ id: string; img: string; link: string }[]>
   getBlockActiveInfo(): Promise<{ allTransactions: number; allAddrs: number }>
 

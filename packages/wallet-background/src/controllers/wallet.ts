@@ -2786,6 +2786,11 @@ export class WalletController extends BaseController {
     return data
   }
 
+  getAppExtra = async (id: string | number, locale?: string) => {
+    const data = await walletApiService.utility.getAppExtra(id, locale)
+    return data
+  }
+
   getBannerList = async () => {
     const data = await walletApiService.utility.getBannerList()
     return data
