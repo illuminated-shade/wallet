@@ -7,6 +7,7 @@ export enum ErrorCodes {
   NOT_SAFE_UTXOS = -4,
   ASSET_MAYBE_LOST = -5,
   INSUFFICIENT_FEE_UTXO = -7,
+  NO_ACCOUNT = -8,
   METHOD_NOT_FOUND = -32601,
   UserCancel = 4001,
   // Wallet's current Bitcoin network is not one of the canonical networks
@@ -24,6 +25,7 @@ export const ErrorMessages: {
   [ErrorCodes.NOT_SAFE_UTXOS]: 'code_not_safe_utxos',
   [ErrorCodes.ASSET_MAYBE_LOST]: 'code_asset_maybe_lost',
   [ErrorCodes.INSUFFICIENT_FEE_UTXO]: 'code_insufficient_fee_utxo',
+  [ErrorCodes.NO_ACCOUNT]: 'wallet_must_has_at_least_one_account',
   [ErrorCodes.METHOD_NOT_FOUND]: 'code_method_not_found',
   [ErrorCodes.UserCancel]: 'user_rejected_the_request',
   [ErrorCodes.UNSUPPORTED_NETWORK]: 'code_unsupported_network',
