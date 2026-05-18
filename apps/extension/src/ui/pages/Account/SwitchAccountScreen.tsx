@@ -77,7 +77,7 @@ export function MyItem({ account, autoNav }: MyItemProps, ref) {
             if (autoNav) navigate('MainScreen');
           }}
           style={{ height: 40 }}>
-          <Text text={account.alianName} style={{ overflow: 'hidden', maxWidth: 180 }} />
+          <Text text={shortAddress(account.alianName, 8)} ellipsis />
           <Text text={`${shortAddress(account.address)}${path}`} preset="sub" />
         </Column>
       </Row>
