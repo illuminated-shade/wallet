@@ -76,104 +76,106 @@ export default function SendCAT20Screen() {
     <Layout>
       <Header onBack={onClickBack} title={t('send_cat20')} />
       <Content>
-        <Text text={cat20Info.name} preset="title-bold" textCenter size="xxl" color="gold" />
-        <Row itemsCenter fullX justifyCenter>
-          <Text
-            text={`${bnUtils.toDecimalAmount(cat20Balance.amount, cat20Balance.decimals)}`}
-            preset="bold"
-            textCenter
-            size="xxl"
-            wrap
-            digital
-          />
-          <BRC20Ticker tick={cat20Info.symbol} preset="lg" />
-        </Row>
-
-        <Row justifyCenter fullX>
-          <TickUsdWithoutPrice
-            tick={cat20Info.tokenId}
-            balance={bnUtils.toDecimalAmount(cat20Balance.amount, cat20Balance.decimals)}
-            type={TokenType.CAT20}
-            size={'md'}
-          />
-        </Row>
-
-        <Column mt="lg">
-          <Input
-            preset="address"
-            addressInputData={toInfo}
-            onAddressInputChange={(val) => {
-              setToInfo(val);
-            }}
-            recipientLabel={<Text text={t('recipient')} preset="regular" color="textDim" />}
-            autoFocus={true}
-          />
-        </Column>
-
-        <Column mt="lg">
-          <Row justifyBetween>
-            <Text text={t('balance')} color="textDim" />
-            <TickUsdWithoutPrice tick={cat20Info.tokenId} balance={inputAmount} type={TokenType.CAT20} />
-            <Row
-              itemsCenter
-              onClick={() => {
-                setInputAmount(bnUtils.toDecimalAmount(availableTokenAmount, cat20Balance.decimals));
-              }}>
-              <Text text={t('max')} preset="sub" style={{ color: colors.white_muted }} />
-              <Text
-                text={`${showLongNumber(bnUtils.toDecimalAmount(availableTokenAmount, cat20Balance.decimals))}`}
-                preset="bold"
-                size="sm"
-                wrap
-              />
-              <BRC20Ticker tick={cat20Info.symbol} preset="sm" />
-            </Row>
+        <Column>
+          <Text text={cat20Info.name} preset="title-bold" textCenter size="xxl" color="gold" />
+          <Row itemsCenter fullX justifyCenter>
+            <Text
+              text={`${bnUtils.toDecimalAmount(cat20Balance.amount, cat20Balance.decimals)}`}
+              preset="bold"
+              textCenter
+              size="xxl"
+              wrap
+              digital
+            />
+            <BRC20Ticker tick={cat20Info.symbol} preset="lg" />
           </Row>
-          <Input
-            preset="amount"
-            placeholder={t('amount')}
-            value={inputAmount.toString()}
-            runesDecimal={cat20Balance.decimals}
-            onAmountInputChange={(amount) => {
-              setInputAmount(amount);
-            }}
-          />
 
-          {shouldShowMerge && (
-            <Column style={{ borderWidth: 1, borderRadius: 10, borderColor: 'rgba(255,255,255,0.3)' }}>
-              <Column mx="md" my="md">
-                <Text
-                  text={t('to_send_a_larger_amount_please_merge_your_utxos_to_increase_the_available_balance')}
-                  size="xs"
-                  color="textDim"
-                />
+          <Row justifyCenter fullX>
+            <TickUsdWithoutPrice
+              tick={cat20Info.tokenId}
+              balance={bnUtils.toDecimalAmount(cat20Balance.amount, cat20Balance.decimals)}
+              type={TokenType.CAT20}
+              size={'md'}
+            />
+          </Row>
 
+          <Column mt="lg">
+            <Input
+              preset="address"
+              addressInputData={toInfo}
+              onAddressInputChange={(val) => {
+                setToInfo(val);
+              }}
+              recipientLabel={<Text text={t('recipient')} preset="regular" color="textDim" />}
+              autoFocus={true}
+            />
+          </Column>
+
+          <Column mt="lg">
+            <Row justifyBetween>
+              <Text text={t('balance')} color="textDim" />
+              <TickUsdWithoutPrice tick={cat20Info.tokenId} balance={inputAmount} type={TokenType.CAT20} />
+              <Row
+                itemsCenter
+                onClick={() => {
+                  setInputAmount(bnUtils.toDecimalAmount(availableTokenAmount, cat20Balance.decimals));
+                }}>
+                <Text text={t('max')} preset="sub" style={{ color: colors.white_muted }} />
                 <Text
-                  text={t('merge_utxos_to_increase_the_available_balance')}
-                  size="xs"
-                  color="gold"
-                  onClick={onClickMergeUTXO}
+                  text={`${showLongNumber(bnUtils.toDecimalAmount(availableTokenAmount, cat20Balance.decimals))}`}
+                  preset="bold"
+                  size="sm"
+                  wrap
                 />
+                <BRC20Ticker tick={cat20Info.symbol} preset="sm" />
+              </Row>
+            </Row>
+            <Input
+              preset="amount"
+              placeholder={t('amount')}
+              value={inputAmount.toString()}
+              runesDecimal={cat20Balance.decimals}
+              onAmountInputChange={(amount) => {
+                setInputAmount(amount);
+              }}
+            />
+
+            {shouldShowMerge && (
+              <Column style={{ borderWidth: 1, borderRadius: 10, borderColor: 'rgba(255,255,255,0.3)' }}>
+                <Column mx="md" my="md">
+                  <Text
+                    text={t('to_send_a_larger_amount_please_merge_your_utxos_to_increase_the_available_balance')}
+                    size="xs"
+                    color="textDim"
+                  />
+
+                  <Text
+                    text={t('merge_utxos_to_increase_the_available_balance')}
+                    size="xs"
+                    color="gold"
+                    onClick={onClickMergeUTXO}
+                  />
+                </Column>
               </Column>
-            </Column>
+            )}
+          </Column>
+
+          <Column mt="lg">
+            <FeeRateBar />
+          </Column>
+
+          {error && <Text text={error} color="error" />}
+
+          <Button disabled={disabled} preset="primary" text={t('next')} onClick={onClickNext}></Button>
+
+          {showMergeBTCUTXOPopover && (
+            <MergeBTCPopover
+              onClose={() => {
+                setShowMergeBTCUTXOPopover(false);
+              }}
+            />
           )}
         </Column>
-
-        <Column mt="lg">
-          <FeeRateBar />
-        </Column>
-
-        {error && <Text text={error} color="error" />}
-
-        <Button disabled={disabled} preset="primary" text={t('next')} onClick={onClickNext}></Button>
-
-        {showMergeBTCUTXOPopover && (
-          <MergeBTCPopover
-            onClose={() => {
-              setShowMergeBTCUTXOPopover(false);
-            }}
-          />
-        )}
       </Content>
     </Layout>
   );

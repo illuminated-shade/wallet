@@ -48,65 +48,42 @@ export default function TxCreateScreen() {
         title={headerTitle}
       />
       <Content style={{ padding: '0px 16px 24px' }}>
-        <Row justifyCenter>
-          <Image src={IMAGE_SOURCE_MAP[chain.icon]} size={50} />
-        </Row>
-
-        <Column mt="lg">
-          <Input
-            preset="address"
-            addressInputData={toInfo}
-            onAddressInputChange={onAddressInputChange}
-            autoFocus={true}
-            networkType={chain.enum}
-            data-testid="recipient-address-input"
-          />
-        </Column>
-
-        <Column mt="lg">
-          <Row justifyBetween>
-            <Text text={t('transfer_amount')} preset="regular" />
-            <BtcUsd sats={toSatoshis} />
+        <Column>
+          <Row justifyCenter>
+            <Image src={IMAGE_SOURCE_MAP[chain.icon]} size={50} />
           </Row>
-          <Input
-            preset="amount"
-            placeholder={t('tx_amount')}
-            value={inputAmount}
-            onAmountInputChange={onAmountInputChange}
-            enableMax={true}
-            onMaxClick={onAmountMaxClick}
-            data-testid="transfer-amount-input"
-          />
 
-          <Card
-            style={{
-              flexDirection: 'column',
-              borderRadius: 8
-            }}>
-            <Row
-              justifyBetween
-              fullX
-              itemsCenter
-              style={{
-                minHeight: 30
-              }}>
-              <Text text={t('available')} color="gold" />
-              <Row>
-                <Text text={`${availableAmount}`} size="sm" color="gold" />
-                <Text text={btcUnit} size="sm" color="textDim" />
-              </Row>
+          <Column mt="lg">
+            <Input
+              preset="address"
+              addressInputData={toInfo}
+              onAddressInputChange={onAddressInputChange}
+              autoFocus={true}
+              networkType={chain.enum}
+              data-testid="recipient-address-input"
+            />
+          </Column>
+
+          <Column mt="lg">
+            <Row justifyBetween>
+              <Text text={t('transfer_amount')} preset="regular" />
+              <BtcUsd sats={toSatoshis} />
             </Row>
+            <Input
+              preset="amount"
+              placeholder={t('tx_amount')}
+              value={inputAmount}
+              onAmountInputChange={onAmountInputChange}
+              enableMax={true}
+              onMaxClick={onAmountMaxClick}
+              data-testid="transfer-amount-input"
+            />
 
-            {showUnavailable ? (
-              <Row
-                style={{
-                  width: '100%',
-                  border: '1px dashed',
-                  borderColor: colors.line
-                }}></Row>
-            ) : null}
-
-            {showUnavailable ? (
+            <Card
+              style={{
+                flexDirection: 'column',
+                borderRadius: 8
+              }}>
               <Row
                 justifyBetween
                 fullX
@@ -114,68 +91,93 @@ export default function TxCreateScreen() {
                 style={{
                   minHeight: 30
                 }}>
-                <Tooltip
-                  title={unavailableTipText}
-                  placement="top"
-                  autoAdjustOverflow={true}
-                  align={{
-                    overflow: {
-                      adjustX: true,
-                      adjustY: true
-                    }
-                  }}
-                  overlayStyle={{
-                    fontSize: fontSizes.xs,
-                    maxWidth: '280px',
-                    wordWrap: 'break-word',
-                    whiteSpace: 'normal'
-                  }}>
-                  <div style={{ display: 'flex', alignItems: 'center' }}>
-                    <Row itemsCenter>
-                      <Text text={t('unavailable')} />
-                      <Icon icon="circle-question" color="textDim" />
-                    </Row>
-                  </div>
-                </Tooltip>
-
-                <Row itemsCenter>
-                  <Row>
-                    <Text text={`${unavailableAmount}`} size="sm" />
-                    <Text text={btcUnit} size="sm" color="textDim" />
-                  </Row>
-                  {walletConfig.disableUtxoTools ? null : (
-                    <Button
-                      preset="minimal"
-                      text={t('unlock')}
-                      textStyle={{
-                        fontSize: isSpecialLocale ? '8px' : '14px'
-                      }}
-                      onClick={() => {
-                        nav.navToUtxoTools();
-                      }}
-                    />
-                  )}
+                <Text text={t('available')} color="gold" />
+                <Row>
+                  <Text text={`${availableAmount}`} size="sm" color="gold" />
+                  <Text text={btcUnit} size="sm" color="textDim" />
                 </Row>
               </Row>
-            ) : null}
-          </Card>
-        </Column>
 
-        <Column mt="lg">
-          <FeeRateBar />
-        </Column>
-        <Column mt="lg">
-          <RBFBar value={enableRBF} onChange={onRBFChange} />
-        </Column>
+              {showUnavailable ? (
+                <Row
+                  style={{
+                    width: '100%',
+                    border: '1px dashed',
+                    borderColor: colors.line
+                  }}></Row>
+              ) : null}
 
-        {error && <Text text={error} color="error" />}
+              {showUnavailable ? (
+                <Row
+                  justifyBetween
+                  fullX
+                  itemsCenter
+                  style={{
+                    minHeight: 30
+                  }}>
+                  <Tooltip
+                    title={unavailableTipText}
+                    placement="top"
+                    autoAdjustOverflow={true}
+                    align={{
+                      overflow: {
+                        adjustX: true,
+                        adjustY: true
+                      }
+                    }}
+                    overlayStyle={{
+                      fontSize: fontSizes.xs,
+                      maxWidth: '280px',
+                      wordWrap: 'break-word',
+                      whiteSpace: 'normal'
+                    }}>
+                    <div style={{ display: 'flex', alignItems: 'center' }}>
+                      <Row itemsCenter>
+                        <Text text={t('unavailable')} />
+                        <Icon icon="circle-question" color="textDim" />
+                      </Row>
+                    </div>
+                  </Tooltip>
 
-        <Button
-          disabled={disabled}
-          preset="primary"
-          text={t('next')}
-          onClick={onClickNext}
-          data-testid="tx-next-button"></Button>
+                  <Row itemsCenter>
+                    <Row>
+                      <Text text={`${unavailableAmount}`} size="sm" />
+                      <Text text={btcUnit} size="sm" color="textDim" />
+                    </Row>
+                    {walletConfig.disableUtxoTools ? null : (
+                      <Button
+                        preset="minimal"
+                        text={t('unlock')}
+                        textStyle={{
+                          fontSize: isSpecialLocale ? '8px' : '14px'
+                        }}
+                        onClick={() => {
+                          nav.navToUtxoTools();
+                        }}
+                      />
+                    )}
+                  </Row>
+                </Row>
+              ) : null}
+            </Card>
+          </Column>
+
+          <Column mt="lg">
+            <FeeRateBar />
+          </Column>
+          <Column mt="lg">
+            <RBFBar value={enableRBF} onChange={onRBFChange} />
+          </Column>
+
+          {error && <Text text={error} color="error" />}
+
+          <Button
+            disabled={disabled}
+            preset="primary"
+            text={t('next')}
+            onClick={onClickNext}
+            data-testid="tx-next-button"></Button>
+        </Column>
       </Content>
     </Layout>
   );

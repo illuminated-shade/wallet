@@ -1,10 +1,10 @@
 import { Button, Column, Content, Header, Input, Layout, Row, Text } from '@/ui/components';
+import { Loading } from '@/ui/components/ActionComponent/Loading';
 import CAT721Preview from '@/ui/components/CAT721Preview';
 import { FeeRateBar } from '@/ui/components/FeeRateBar';
 import { MergeBTCPopover } from '@/ui/components/MergeBTCPopover';
 import { SendCAT721ScreenStep, useSendCAT721ScreenLogic } from '@unisat/wallet-state';
 
-import { Loading } from '@/ui/components/ActionComponent/Loading';
 import { SignPsbt } from '../Approval/components';
 
 export default function SendCAT721Screen() {
@@ -67,45 +67,47 @@ export default function SendCAT721Screen() {
     <Layout>
       <Header onBack={onClickBack} title={t('send_cat721')} />
       <Content>
-        <Text text={collectionInfo.name} preset="title-bold" textCenter size="xxl" color="gold" />
+        <Column>
+          <Text text={collectionInfo.name} preset="title-bold" textCenter size="xxl" color="gold" />
 
-        <Row justifyCenter>
-          <CAT721Preview
-            version={version}
-            preset="medium"
-            collectionId={collectionInfo.collectionId}
-            contentType={collectionInfo.contentType}
-            localId={localId}
-          />
-        </Row>
+          <Row justifyCenter>
+            <CAT721Preview
+              version={version}
+              preset="medium"
+              collectionId={collectionInfo.collectionId}
+              contentType={collectionInfo.contentType}
+              localId={localId}
+            />
+          </Row>
 
-        <Column mt="lg">
-          <Input
-            preset="address"
-            addressInputData={toInfo}
-            onAddressInputChange={(val) => {
-              setToInfo(val);
-            }}
-            autoFocus={true}
-            recipientLabel={<Text text={t('recipient')} preset="regular" color="textDim" />}
-          />
+          <Column mt="lg">
+            <Input
+              preset="address"
+              addressInputData={toInfo}
+              onAddressInputChange={(val) => {
+                setToInfo(val);
+              }}
+              autoFocus={true}
+              recipientLabel={<Text text={t('recipient')} preset="regular" color="textDim" />}
+            />
+          </Column>
+
+          <Column mt="lg">
+            <FeeRateBar />
+          </Column>
+
+          {error && <Text text={error} color="error" />}
+
+          <Button disabled={disabled} preset="primary" text={t('next')} onClick={onClickNext} />
+
+          {showMergeBTCUTXOPopover && (
+            <MergeBTCPopover
+              onClose={() => {
+                setShowMergeBTCUTXOPopover(false);
+              }}
+            />
+          )}
         </Column>
-
-        <Column mt="lg">
-          <FeeRateBar />
-        </Column>
-
-        {error && <Text text={error} color="error" />}
-
-        <Button disabled={disabled} preset="primary" text={t('next')} onClick={onClickNext} />
-
-        {showMergeBTCUTXOPopover && (
-          <MergeBTCPopover
-            onClose={() => {
-              setShowMergeBTCUTXOPopover(false);
-            }}
-          />
-        )}
       </Content>
     </Layout>
   );
