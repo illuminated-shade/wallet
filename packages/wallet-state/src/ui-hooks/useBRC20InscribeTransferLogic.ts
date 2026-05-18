@@ -331,9 +331,11 @@ export function useBRC20InscribeTransferLogicStep3(params: BRC20InscribeTransfer
   const onSignPsbtHandleConfirm = async (signedDatas: SignedData[]) => {
     tools.showLoading(true)
     try {
-      const { success, txid, error } = await pushBitcoinTx(signedDatas[0].psbtHex)
+      const { success, error } = await pushBitcoinTx(signedDatas[0].psbtHex)
       if (success) {
-        nav.navigate('TxSuccessScreen', { txid })
+        updateContextData({
+          step: Step.STEP4,
+        })
       } else {
         throw new Error(error)
       }
