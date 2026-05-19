@@ -1,5 +1,24 @@
 # @unisat/wallet-background
 
+## 3.0.0
+
+### Minor Changes
+
+- release: minor wave for accumulated wallet toolkit updates since the previous package release.
+
+### Patch Changes
+
+- Updated dependencies
+  - @unisat/keyring-service@1.2.0
+  - @unisat/preference-service@0.3.0
+  - @unisat/tx-helpers@1.2.0
+  - @unisat/wallet-api@1.2.0
+  - @unisat/wallet-shared@0.3.0
+  - @unisat/notification-service@1.1.2
+  - @unisat/approval-service@1.1.2
+  - @unisat/contact-book@1.1.1
+  - @unisat/permission-service@1.1.1
+
 ## 2.0.0
 
 ### Patch Changes

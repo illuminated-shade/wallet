@@ -1,5 +1,11 @@
 # @unisat/wallet-shared
 
+## 0.3.0
+
+### Minor Changes
+
+- release: minor wave for accumulated wallet toolkit updates since the previous package release.
+
 ## 0.2.0
 
 ### Minor Changes

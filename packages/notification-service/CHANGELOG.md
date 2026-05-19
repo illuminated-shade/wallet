@@ -1,5 +1,14 @@
 # @unisat/notification-service
 
+## 1.1.2
+
+### Patch Changes
+
+- Updated dependencies
+  - @unisat/wallet-api@1.2.0
+  - @unisat/wallet-shared@0.3.0
+  - @unisat/wallet-storage@0.2.2
+
 ## 1.1.1
 
 ### Patch Changes

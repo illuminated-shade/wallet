@@ -1,5 +1,17 @@
 # @unisat/wallet-state
 
+## 1.2.0
+
+### Minor Changes
+
+- release: minor wave for accumulated wallet toolkit updates since the previous package release.
+
+### Patch Changes
+
+- Updated dependencies
+  - @unisat/keyring-service@1.2.0
+  - @unisat/wallet-shared@0.3.0
+
 ## 1.1.0
 
 ### Minor Changes
