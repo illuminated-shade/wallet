@@ -99,6 +99,8 @@ export const BRAND_ALIAN_TYPE_TEXT = {
   [KeyringType.WatchAddressKeyring]: 'Watch',
 }
 
+export const MAX_ALIAS_NAME_LENGTH = 20
+
 export const KEYRING_TYPES: {
   [key: string]: {
     name: string
