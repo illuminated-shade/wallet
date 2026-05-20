@@ -30,6 +30,7 @@ import {
   Account,
   AddressTokenSummary,
   AddressUserToSignInput,
+  AccountSignMethod,
   BRC20HistoryItem,
   BUS_EVENTS,
   BUS_METHODS,
@@ -58,6 +59,7 @@ import {
   UTXO,
   WalletKeyring,
   bgI18n,
+  getAccountCapabilities,
   getLockTimeInfo,
   t,
 } from '@unisat/wallet-shared'
@@ -109,6 +111,12 @@ const caculateTapLeafHash = (input: any, pubkey: Buffer) => {
   })
 
   return tapLeafHashes.map(each => each.hash)
+}
+
+function assertCanCreateSigningRequest(account: Account | null | undefined) {
+  if (!getAccountCapabilities(account).canCreateSigningRequest) {
+    throw new Error(t('not_supported'))
+  }
 }
 
 export class WalletController extends BaseController {
@@ -678,10 +686,7 @@ export class WalletController extends BaseController {
   changeAddressType = async (addressType: AddressType) => {
     const currentAccount = await this.getCurrentAccount()
     const currentKeyring = await this.getCurrentKeyring()
-    if (
-      currentKeyring?.type === KeyringType.ColdWalletKeyring ||
-      currentKeyring?.type === KeyringType.WatchAddressKeyring
-    ) {
+    if (!getAccountCapabilities(currentKeyring).canChangeAddressType) {
       throw new Error(t('not_supported'))
     }
     const currentKeyringIndex = preferenceService.getCurrentKeyringIndex()
@@ -694,6 +699,7 @@ export class WalletController extends BaseController {
   formatOptionsToSignInputs = async (_psbt: string | bitcoin.Psbt, options?: SignPsbtOptions) => {
     const account = await this.getCurrentAccount()
     if (!account) throw null
+    assertCanCreateSigningRequest(account)
 
     let toSignInputs: ToSignInput[] = []
     if (options && options.toSignInputs) {
@@ -799,6 +805,7 @@ export class WalletController extends BaseController {
   formatPsbt = async (psbt: bitcoin.Psbt, toSignInputs: ToSignInput[], autoFinalized?: boolean) => {
     const account = await this.getCurrentAccount()
     if (!account) throw new Error('no current account')
+    assertCanCreateSigningRequest(account)
 
     const keyring = await this.getCurrentKeyring()
     if (!keyring) throw new Error('no current keyring')
@@ -957,10 +964,7 @@ export class WalletController extends BaseController {
   _signPsbt = async (psbt: bitcoin.Psbt, toSignInputs: ToSignInput[], autoFinalized: boolean) => {
     const account = await this.getCurrentAccount()
     if (!account) throw new Error('no current account')
-    if (
-      account.type === KeyringType.ReadonlyKeyring ||
-      account.type === KeyringType.WatchAddressKeyring
-    ) {
+    if (getAccountCapabilities(account).signMethod !== AccountSignMethod.Local) {
       throw new Error(t('not_supported'))
     }
 
@@ -1011,8 +1015,9 @@ export class WalletController extends BaseController {
 
     const account = preferenceService.getCurrentAccount()
     if (!account) throw new Error('no current account')
+    assertCanCreateSigningRequest(account)
 
-    if (account.type === KeyringType.ReadonlyKeyring) {
+    if (getAccountCapabilities(account).signMethod !== AccountSignMethod.Local) {
       throw new Error('Readonly wallet cannot sign messages')
     }
 
@@ -1251,6 +1256,7 @@ export class WalletController extends BaseController {
 
     const account = preferenceService.getCurrentAccount()
     if (!account) throw new Error('no current account')
+    assertCanCreateSigningRequest(account)
 
     const networkType = this.getNetworkType()
 
@@ -1327,6 +1333,7 @@ export class WalletController extends BaseController {
   }> => {
     const account = preferenceService.getCurrentAccount()
     if (!account) throw new Error('no current account')
+    assertCanCreateSigningRequest(account)
 
     const networkType = this.getNetworkType()
 
@@ -1396,6 +1403,7 @@ export class WalletController extends BaseController {
   }): Promise<ToSignData> => {
     const account = preferenceService.getCurrentAccount()
     if (!account) throw new Error('no current account')
+    assertCanCreateSigningRequest(account)
 
     const networkType = this.getNetworkType()
 
@@ -1478,6 +1486,7 @@ export class WalletController extends BaseController {
   }): Promise<ToSignData> => {
     const account = preferenceService.getCurrentAccount()
     if (!account) throw new Error('no current account')
+    assertCanCreateSigningRequest(account)
 
     const networkType = this.getNetworkType()
 
@@ -1565,6 +1574,7 @@ export class WalletController extends BaseController {
   }): Promise<ToSignData> => {
     const account = preferenceService.getCurrentAccount()
     if (!account) throw new Error('no current account')
+    assertCanCreateSigningRequest(account)
 
     const networkType = this.getNetworkType()
 
@@ -2452,6 +2462,7 @@ export class WalletController extends BaseController {
 
     const account = preferenceService.getCurrentAccount()
     if (!account) throw new Error('no current account')
+    assertCanCreateSigningRequest(account)
 
     const networkType = this.getNetworkType()
 
@@ -2715,6 +2726,7 @@ export class WalletController extends BaseController {
     if (!currentAccount) {
       return
     }
+    assertCanCreateSigningRequest(currentAccount)
 
     const _res = await walletApiService.cat.transferCAT20Step1(
       version,
@@ -2787,6 +2799,7 @@ export class WalletController extends BaseController {
     if (!currentAccount) {
       return
     }
+    assertCanCreateSigningRequest(currentAccount)
 
     const _res = await walletApiService.cat.mergeCAT20Prepare(
       version,
@@ -2870,6 +2883,7 @@ export class WalletController extends BaseController {
     if (!currentAccount) {
       return
     }
+    assertCanCreateSigningRequest(currentAccount)
 
     const _res = await walletApiService.cat.transferCAT721Step1(
       version,
@@ -3179,6 +3193,10 @@ export class WalletController extends BaseController {
     amount: string
     feeRate: number
   }) => {
+    const account = preferenceService.getCurrentAccount()
+    if (!account) throw new Error('no current account')
+    assertCanCreateSigningRequest(account)
+
     params.amount = paramsUtils.formatAmount(params.amount)
 
     const result = await walletApiService.brc20.singleStepTransferBRC20Step1(params)
@@ -3237,6 +3255,7 @@ export class WalletController extends BaseController {
   ): Promise<ToSignData> => {
     const currentAccount = await this.getCurrentAccount()
     if (!currentAccount) throw new Error('no current account')
+    assertCanCreateSigningRequest(currentAccount)
 
     const { psbtBase64, toSignInputs } =
       await walletApiService.bitcoin.createSendCoinBypassHeadOffsets(
@@ -3324,6 +3343,7 @@ export class WalletController extends BaseController {
 
     const account = preferenceService.getCurrentAccount()
     if (!account) throw new Error('no current account')
+    assertCanCreateSigningRequest(account)
 
     const txData = await walletApiService.alkanes.createAlkanesSendTx({
       userAddress: account.address,

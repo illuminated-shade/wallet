@@ -13,12 +13,12 @@ import KeystoneSignScreen from '@/ui/pages/Wallet/KeystoneSignScreen';
 import { fontSizes } from '@/ui/theme/font';
 import { numUtils } from '@unisat/base-utils';
 import { KeystoneSignEnum } from '@unisat/keyring-service/types';
-import { KeyringType } from '@unisat/wallet-shared';
+import { AccountSignMethod } from '@unisat/wallet-shared';
 import {
   PsbtLocalInfo,
   SignPsbtProps,
   useBTCUnit,
-  useCurrentAccount,
+  useCurrentAccountCapabilities,
   useI18n,
   useSignPsbtLogic
 } from '@unisat/wallet-state';
@@ -86,9 +86,8 @@ function TransactionItem(
 }
 
 export default function SignPsbt(props: SignPsbtProps) {
-  const account = useCurrentAccount();
-  const isReadonlySigning =
-    account.type === KeyringType.ReadonlyKeyring || account.type === KeyringType.WatchAddressKeyring;
+  const accountCapabilities = useCurrentAccountCapabilities();
+  const isReadonlySigning = accountCapabilities.signMethod === AccountSignMethod.External;
   const {
     showLoading,
     isPsbtRiskPopoverVisible,

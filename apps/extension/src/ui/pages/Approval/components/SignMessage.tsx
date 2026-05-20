@@ -5,8 +5,8 @@ import { PhishingDetection } from '@/ui/components/PhishingDetection';
 import WebsiteBar from '@/ui/components/WebsiteBar';
 import { fontSizes } from '@/ui/theme/font';
 import { KeystoneSignEnum } from '@unisat/keyring-service/types';
-import { KeyringType, SignMessageType } from '@unisat/wallet-shared';
-import { SignMessageProps, useCurrentAccount, useSignMessageLogic, useTools } from '@unisat/wallet-state';
+import { AccountSignMethod, SignMessageType } from '@unisat/wallet-shared';
+import { SignMessageProps, useCurrentAccountCapabilities, useSignMessageLogic, useTools } from '@unisat/wallet-state';
 
 import KeystoneSignScreen from '../../Wallet/KeystoneSignScreen';
 import MultiSignDisclaimerModal from './SignPsbt/components/MultiSignDisclaimerModal';
@@ -55,9 +55,9 @@ export default function SignMessage(props: SignMessageProps) {
 
     onDisclaimerModalClose
   } = useSignMessageLogic(props);
-  const account = useCurrentAccount();
+  const accountCapabilities = useCurrentAccountCapabilities();
   const tools = useTools();
-  const isReadonly = account.type === KeyringType.ReadonlyKeyring;
+  const isReadonly = accountCapabilities.signMethod === AccountSignMethod.External;
 
   let header = props.header;
 

@@ -15,7 +15,8 @@ export default function CAT721NFTScreen() {
 
     // actions
     onClickBack,
-    onClickSend
+    onClickSend,
+    disabledSend
   } = useCAT721NFTScreenLogic();
 
   return (
@@ -44,7 +45,7 @@ export default function CAT721NFTScreen() {
             <Section title={t('collection')} value={collectionInfo.name} />
           </Column>
         </Card>
-        <Button preset="primary" text={t('send')} icon="send" onClick={onClickSend}></Button>
+        <Button preset="primary" text={t('send')} icon="send" disabled={disabledSend} onClick={onClickSend}></Button>
       </Content>
     </Layout>
   );

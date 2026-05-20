@@ -1,6 +1,7 @@
 import { numUtils } from '@unisat/base-utils'
-import { KeyringType, ToSignInput } from '@unisat/keyring-service/types'
+import { ToSignInput } from '@unisat/keyring-service/types'
 import {
+  AccountSignMethod,
   ApprovalSession,
   ContractResult,
   DecodedPsbt,
@@ -14,7 +15,7 @@ import {
 import logger from 'loglevel'
 import { useEffect, useMemo, useRef, useState } from 'react'
 import { useApproval, useI18n, useTools, useWallet } from 'src/context'
-import { useCurrentAccount } from 'src/hooks'
+import { useCurrentAccountCapabilities } from 'src/hooks'
 import { useAsyncEffect } from 'src/utils/ui-utils'
 
 interface InscriptionInfo {
@@ -93,8 +94,7 @@ export function useSignPsbtLogic(props: SignPsbtProps) {
 
   const wallet = useWallet()
   const tools = useTools()
-  const currentAccount = useCurrentAccount()
-  const keyringType = currentAccount.type
+  const accountCapabilities = useCurrentAccountCapabilities()
 
   const { t } = useI18n()
 
@@ -123,17 +123,12 @@ export function useSignPsbtLogic(props: SignPsbtProps) {
       return
     }
 
-    if (
-      keyringType === KeyringType.KeystoneKeyring ||
-      keyringType === KeyringType.ColdWalletKeyring ||
-      keyringType === KeyringType.ReadonlyKeyring ||
-      keyringType === KeyringType.WatchAddressKeyring
-    ) {
+    if (accountCapabilities.signMethod !== AccountSignMethod.Local) {
       return
     }
 
     setAllowQuickMultiSign(websiteResult.allowQuickMultiSign && toSignDatas.length > 1)
-  }, [websiteResult, keyringType])
+  }, [websiteResult, accountCapabilities])
 
   useAsyncEffect(async () => {
     const website = session?.origin
@@ -377,23 +372,28 @@ export function useSignPsbtLogic(props: SignPsbtProps) {
   }
 
   const onNextStep = () => {
-    if (keyringType === KeyringType.KeystoneKeyring) {
-      setIsKeystoneSigning(true)
-    } else if (keyringType === KeyringType.ColdWalletKeyring) {
-      setIsColdWalletSigning(true)
-    } else if (
-      keyringType === KeyringType.ReadonlyKeyring ||
-      keyringType === KeyringType.WatchAddressKeyring
-    ) {
-      if (!readonlySignedPsbtHex) {
-        tools.toastError(t('invalid_psbt'))
+    switch (accountCapabilities.signMethod) {
+      case AccountSignMethod.Keystone:
+        setIsKeystoneSigning(true)
         return
-      }
+      case AccountSignMethod.ColdWallet:
+        setIsColdWalletSigning(true)
+        return
+      case AccountSignMethod.External:
+        if (!readonlySignedPsbtHex) {
+          tools.toastError(t('invalid_psbt'))
+          return
+        }
 
-      onSignedData({ psbtHex: readonlySignedPsbtHex }, signingTxIndex)
-      setReadonlySignedPsbtHex('')
-    } else {
-      localSign()
+        onSignedData({ psbtHex: readonlySignedPsbtHex }, signingTxIndex)
+        setReadonlySignedPsbtHex('')
+        return
+      case AccountSignMethod.Local:
+        localSign()
+        return
+      case AccountSignMethod.None:
+      default:
+        tools.toastError(t('not_supported'))
     }
   }
 

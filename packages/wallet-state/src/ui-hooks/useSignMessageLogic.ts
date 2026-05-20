@@ -1,9 +1,14 @@
-import { KeyringType } from '@unisat/keyring-service/types'
-import { SignedMessage, SignState, ToSignMessage, WebsiteResult } from '@unisat/wallet-shared'
+import {
+  AccountSignMethod,
+  SignedMessage,
+  SignState,
+  ToSignMessage,
+  WebsiteResult,
+} from '@unisat/wallet-shared'
 import logger from 'loglevel'
 import { useEffect, useMemo, useRef, useState } from 'react'
 import { useApproval, useI18n, useTools, useWallet } from 'src/context'
-import { useCurrentAccount } from 'src/hooks'
+import { useCurrentAccountCapabilities } from 'src/hooks'
 import { shortAddress, useAsyncEffect } from 'src/utils/ui-utils'
 export interface SignMessageProps {
   header?: React.ReactNode
@@ -40,8 +45,7 @@ export function useSignMessageLogic(props: SignMessageProps) {
 
   const wallet = useWallet()
   const tools = useTools()
-  const currentAccount = useCurrentAccount()
-  const keyringType = currentAccount.type
+  const accountCapabilities = useCurrentAccountCapabilities()
 
   const { t } = useI18n()
 
@@ -66,16 +70,12 @@ export function useSignMessageLogic(props: SignMessageProps) {
       return
     }
 
-    if (
-      keyringType === KeyringType.KeystoneKeyring ||
-      keyringType === KeyringType.ColdWalletKeyring ||
-      keyringType === KeyringType.ReadonlyKeyring
-    ) {
+    if (accountCapabilities.signMethod !== AccountSignMethod.Local) {
       return
     }
 
     setAllowQuickMultiSign(websiteResult.allowQuickMultiSign && toSignMessages.length > 1)
-  }, [websiteResult, keyringType])
+  }, [websiteResult, accountCapabilities, toSignMessages.length])
 
   useAsyncEffect(async () => {
     const website = session?.origin
@@ -192,20 +192,28 @@ export function useSignMessageLogic(props: SignMessageProps) {
   }
 
   const onNextStep = () => {
-    if (keyringType === KeyringType.KeystoneKeyring) {
-      setIsKeystoneSigning(true)
-    } else if (keyringType === KeyringType.ColdWalletKeyring) {
-      setIsColdWalletSigning(true)
-    } else if (keyringType === KeyringType.ReadonlyKeyring) {
-      if (!readonlySignature) {
-        tools.toastError(t('please_enter_your_signature'))
+    switch (accountCapabilities.signMethod) {
+      case AccountSignMethod.Keystone:
+        setIsKeystoneSigning(true)
         return
-      }
+      case AccountSignMethod.ColdWallet:
+        setIsColdWalletSigning(true)
+        return
+      case AccountSignMethod.External:
+        if (!readonlySignature) {
+          tools.toastError(t('please_enter_your_signature'))
+          return
+        }
 
-      onSignedData({ signature: readonlySignature }, signingTxIndex)
-      setReadonlySignature('')
-    } else {
-      localSign()
+        onSignedData({ signature: readonlySignature }, signingTxIndex)
+        setReadonlySignature('')
+        return
+      case AccountSignMethod.Local:
+        localSign()
+        return
+      case AccountSignMethod.None:
+      default:
+        tools.toastError(t('not_supported'))
     }
   }
 

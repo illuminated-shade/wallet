@@ -31,26 +31,23 @@ import {
   NETWORK_TYPES,
   PlatformEnv,
   SESSION_EVENTS,
+  AccountSignMethod,
   SignMessageResult,
   SignMessageType,
   SignPsbtResult,
   ToSignData,
   ToSignMessage,
+  getAccountCapabilities,
 } from '@unisat/wallet-shared'
-import { KeyringType } from '@unisat/keyring-service/types'
 import { NetworkType } from '@unisat/wallet-types'
 import { formatPsbtHex } from '../../utils/psbt-utils'
-
-function isReadonlyKeyringType(type?: string) {
-  return type === KeyringType.ReadonlyKeyring || type === KeyringType.WatchAddressKeyring
-}
 
 function assertReadonlyMessageSignature(
   account: Awaited<ReturnType<typeof wallet.getCurrentAccount>>,
   toSignMessage: ToSignMessage,
   signature?: string
 ) {
-  if (!account || !isReadonlyKeyringType(account.type)) return
+  if (!account || getAccountCapabilities(account).signMethod !== AccountSignMethod.External) return
 
   let verified = false
   if (signature) {
@@ -117,7 +114,7 @@ function assertReadonlySignedPsbt(
   toSignData: ToSignData,
   psbtHex?: string
 ) {
-  if (!account || !isReadonlyKeyringType(account.type)) return
+  if (!account || getAccountCapabilities(account).signMethod !== AccountSignMethod.External) return
   if (!psbtHex) throw new Error('invalid psbt')
 
   const psbt = bitcoin.Psbt.fromHex(psbtHex)

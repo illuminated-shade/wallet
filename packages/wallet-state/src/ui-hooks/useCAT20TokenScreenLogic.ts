@@ -9,6 +9,7 @@ import {
   useCAT20TokenInfoExplorerUrl,
   useChainType,
   useCurrentAccount,
+  useCurrentAccountCapabilities,
   useCurrentKeyring,
   useResetTxState,
 } from 'src/hooks'
@@ -39,6 +40,7 @@ export function useCAT20TokenScreenLogic() {
 
   const account = useCurrentAccount()
   const keyring = useCurrentKeyring()
+  const accountCapabilities = useCurrentAccountCapabilities()
   const [loading, setLoading] = useState(true)
   const tools = useTools()
   useEffect(() => {
@@ -52,11 +54,13 @@ export function useCAT20TokenScreenLogic() {
 
   const enableTransfer = useMemo(() => {
     let enable = false
-    if (tokenSummary.cat20Balance && tokenSummary.cat20Balance.amount !== '0') {
+    if (accountCapabilities.canCreateSigningRequest && tokenSummary.cat20Balance && tokenSummary.cat20Balance.amount !== '0') {
       enable = true
     }
     return enable
-  }, [tokenSummary])
+  }, [accountCapabilities.canCreateSigningRequest, tokenSummary])
+
+  const enableMerge = accountCapabilities.canCreateSigningRequest
 
   const chainType = useChainType()
   const enableTrade = useMemo(() => {
@@ -75,6 +79,10 @@ export function useCAT20TokenScreenLogic() {
   }
 
   const onClickMerge = e => {
+    if (!accountCapabilities.canCreateSigningRequest) {
+      tools.toastError(t('not_supported'))
+      return
+    }
     if (keyring.type === KeyringType.KeystoneKeyring) {
       tools.toastError(t('merge_utxos_is_not_supported_for_keystone_yet'))
       return
@@ -115,6 +123,7 @@ export function useCAT20TokenScreenLogic() {
     loading,
     tokenUrl,
     enableTransfer,
+    enableMerge,
     enableTrade,
     iconInfo,
     onClickMerge,

@@ -6,6 +6,7 @@ import {
   useChain,
   useChainType,
   useCurrentAccount,
+  useCurrentAccountCapabilities,
   useI18n,
   useNavigation,
   useResetTxState,
@@ -205,6 +206,7 @@ export function useBRC20TokenScreenLogic() {
   const wallet = useWallet()
 
   const account = useCurrentAccount()
+  const accountCapabilities = useCurrentAccountCapabilities()
 
   const [loading, setLoading] = useState(true)
 
@@ -257,13 +259,14 @@ export function useBRC20TokenScreenLogic() {
   const enableTransfer = useMemo(() => {
     let enable = false
     if (
+      accountCapabilities.canCreateSigningRequest &&
       tokenSummary.tokenBalance.overallBalance !== '0' &&
       tokenSummary.tokenBalance.overallBalance !== ''
     ) {
       enable = true
     }
     return enable
-  }, [tokenSummary])
+  }, [accountCapabilities.canCreateSigningRequest, tokenSummary])
 
   const tools = useTools()
   const chainType = useChainType()

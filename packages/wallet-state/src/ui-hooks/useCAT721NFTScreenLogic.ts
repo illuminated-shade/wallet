@@ -1,5 +1,5 @@
 import { useI18n, useNavigation } from 'src/context'
-import { useResetTxState } from 'src/hooks'
+import { useCurrentAccountCapabilities, useResetTxState } from 'src/hooks'
 
 export function useCAT721NFTScreenLogic() {
   const nav = useNavigation()
@@ -8,6 +8,7 @@ export function useCAT721NFTScreenLogic() {
   const { t } = useI18n()
 
   const resetTxState = useResetTxState()
+  const accountCapabilities = useCurrentAccountCapabilities()
 
   const onClickBack = () => {
     nav.goBack()
@@ -33,5 +34,6 @@ export function useCAT721NFTScreenLogic() {
     // actions
     onClickBack,
     onClickSend,
+    disabledSend: !accountCapabilities.canCreateSigningRequest,
   }
 }

@@ -6,6 +6,7 @@ import { BuyBTCModal } from '@/ui/pages/BuyBTC/BuyBTCModal';
 import { TypeChain } from '@unisat/wallet-shared';
 import {
   useChainType,
+  useCurrentAccountCapabilities,
   useCurrentAddress,
   useI18n,
   useNavigation,
@@ -53,6 +54,7 @@ export const WalletActions = ({ chain }: WalletActionsProps) => {
   const walletConfig = useWalletConfig();
   const address = useCurrentAddress();
   const { t } = useI18n();
+  const accountCapabilities = useCurrentAccountCapabilities();
 
   const handleUtxoClick = () => {
     nav.navToUtxoTools();
@@ -89,6 +91,7 @@ export const WalletActions = ({ chain }: WalletActionsProps) => {
         label: t('send'),
         icon: 'send',
         onClick: onSendClick,
+        disabled: !accountCapabilities.canCreateSigningRequest,
         priority: 2,
         dataTestId: 'send-button'
       }
@@ -121,6 +124,7 @@ export const WalletActions = ({ chain }: WalletActionsProps) => {
         label: t('utxo').toUpperCase(),
         icon: 'utxo',
         onClick: handleUtxoClick,
+        disabled: !accountCapabilities.canCreateSigningRequest,
         priority: 6,
         overflowPreset: 'homeGold',
         dataTestId: 'utxo-button'
@@ -128,7 +132,7 @@ export const WalletActions = ({ chain }: WalletActionsProps) => {
     }
 
     return items;
-  }, [buyDisabled, handleUtxoClick, isFractal, t, walletConfig.disableUtxoTools]);
+  }, [accountCapabilities.canCreateSigningRequest, buyDisabled, handleUtxoClick, isFractal, t, walletConfig.disableUtxoTools]);
 
   const { primaryActions, overflowActions } = useMemo(() => {
     const items = actionItems.sort((a, b) => a.priority - b.priority);

@@ -1,6 +1,6 @@
-import { useCallback } from 'react'
+import { useCallback, useMemo } from 'react'
 
-import { Account } from '@unisat/wallet-shared'
+import { Account, getAccountCapabilities } from '@unisat/wallet-shared'
 
 import { KeyringType } from '@unisat/keyring-service/types'
 import { AddressType, ChainType } from '@unisat/wallet-types'
@@ -25,6 +25,11 @@ export function useCurrentAccount() {
 export function useCurrentAddress() {
   const accountsState = useAccountsState()
   return accountsState.current.address
+}
+
+export function useCurrentAccountCapabilities() {
+  const currentAccount = useCurrentAccount()
+  return useMemo(() => getAccountCapabilities(currentAccount), [currentAccount])
 }
 
 export function useAccounts() {

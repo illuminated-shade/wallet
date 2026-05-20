@@ -18,6 +18,7 @@ export default function CAT20TokenScreen() {
     tokenUrl,
     iconInfo,
     enableTransfer,
+    enableMerge,
     enableTrade,
     onClickMerge,
     onClickSend,
@@ -130,7 +131,14 @@ export default function CAT20TokenScreen() {
         }}>
         <Column gap="sm" fullX>
           <Row gap="sm" mt="sm" mb="md">
-            <Button text={t('merge_utxos')} preset="brc20-action" icon="merge" onClick={onClickMerge} full />
+            <Button
+              text={t('merge_utxos')}
+              preset="brc20-action"
+              icon="merge"
+              disabled={!enableMerge}
+              onClick={onClickMerge}
+              full
+            />
 
             <Button
               text={t('send')}

@@ -2,7 +2,7 @@ import { useEffect, useMemo, useRef, useState } from 'react'
 
 import { numUtils } from '@unisat/base-utils'
 import { ADDRESS_TYPES, KeyringType } from '@unisat/keyring-service/types'
-import { getAccountDerivationPath } from '@unisat/wallet-shared'
+import { getAccountCapabilities, getAccountDerivationPath } from '@unisat/wallet-shared'
 import { AddressType } from '@unisat/wallet-types'
 import {
   useAppDispatch,
@@ -29,6 +29,10 @@ export function useAddressTypeScreenLogic() {
   const wallet = useWallet()
   const currentKeyring = useCurrentKeyring()
   const account = useCurrentAccount()
+  const currentKeyringCapabilities = useMemo(
+    () => getAccountCapabilities({ type: currentKeyring.type }),
+    [currentKeyring.type]
+  )
 
   const nav = useNavigation()
   const dispatch = useAppDispatch()
@@ -78,10 +82,7 @@ export function useAddressTypeScreenLogic() {
 
   const addressTypes = useMemo(() => {
     // Wallets backed by a fixed address do not allow switching address types.
-    if (
-      currentKeyring.type === KeyringType.ColdWalletKeyring ||
-      currentKeyring.type === KeyringType.WatchAddressKeyring
-    ) {
+    if (!currentKeyringCapabilities.canChangeAddressType) {
       return ADDRESS_TYPES.filter(v => v.value === currentKeyring.addressType)
     }
 
@@ -108,7 +109,14 @@ export function useAddressTypeScreenLogic() {
         (a, b) => a.displayIndex - b.displayIndex
       )
     }
-  }, [currentKeyring.type, currentKeyring.addressType, addressAssets, addresses])
+  }, [
+    currentKeyring.type,
+    currentKeyring.addressType,
+    currentKeyringCapabilities.canChangeAddressType,
+    currentKeyring.accountIndexDerivation,
+    addressAssets,
+    addresses,
+  ])
 
   const items: AddressTypeItem[] = useMemo(() => {
     return addressTypes.map(v => {
@@ -144,10 +152,7 @@ export function useAddressTypeScreenLogic() {
       return
     }
 
-    if (
-      currentKeyring.type === KeyringType.ColdWalletKeyring ||
-      currentKeyring.type === KeyringType.WatchAddressKeyring
-    ) {
+    if (!currentKeyringCapabilities.canChangeAddressType) {
       tools.toastError(t('not_supported'))
       return
     }
