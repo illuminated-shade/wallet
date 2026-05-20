@@ -45,23 +45,26 @@ export function useUiTxCreateScreen() {
 
 export function useUpdateUiTxCreateScreen() {
   const dispatch = useAppDispatch()
-  return ({
-    toInfo,
-    inputAmount,
-    enableRBF,
-  }: {
-    toInfo?: { address: string; domain: string; inscription?: Inscription }
-    inputAmount?: string
-    enableRBF?: boolean
-  }) => {
-    dispatch(
-      (uiActions as any).updateTxCreateScreen({
-        toInfo,
-        inputAmount,
-        enableRBF,
-      })
-    )
-  }
+  return useCallback(
+    ({
+      toInfo,
+      inputAmount,
+      enableRBF,
+    }: {
+      toInfo?: { address: string; domain: string; inscription?: Inscription }
+      inputAmount?: string
+      enableRBF?: boolean
+    }) => {
+      dispatch(
+        (uiActions as any).updateTxCreateScreen({
+          toInfo,
+          inputAmount,
+          enableRBF,
+        })
+      )
+    },
+    [dispatch]
+  )
 }
 
 export function useFeeRateBar() {
@@ -71,36 +74,39 @@ export function useFeeRateBar() {
 
 export function useUpdateFeeRateBar() {
   const dispatch = useAppDispatch()
-  return ({
-    feeRate,
-    feeRateInputVal,
-    enableLowFeeRate,
-    feeOptionIndex,
-    showCustomInput,
-  }: {
-    feeRate?: number
-    feeRateInputVal?: string
-    enableLowFeeRate?: boolean
-    feeOptionIndex?: number
-    showCustomInput?: boolean
-  }) => {
-    dispatch(
-      (uiActions as any).updateFeeRateBar({
-        feeRate,
-        feeRateInputVal,
-        enableLowFeeRate,
-        feeOptionIndex,
-        showCustomInput,
-      })
-    )
-  }
+  return useCallback(
+    ({
+      feeRate,
+      feeRateInputVal,
+      enableLowFeeRate,
+      feeOptionIndex,
+      showCustomInput,
+    }: {
+      feeRate?: number
+      feeRateInputVal?: string
+      enableLowFeeRate?: boolean
+      feeOptionIndex?: number
+      showCustomInput?: boolean
+    }) => {
+      dispatch(
+        (uiActions as any).updateFeeRateBar({
+          feeRate,
+          feeRateInputVal,
+          enableLowFeeRate,
+          feeOptionIndex,
+          showCustomInput,
+        })
+      )
+    },
+    [dispatch]
+  )
 }
 
 export function useResetFeeRateBar() {
   const dispatch = useAppDispatch()
-  return () => {
+  return useCallback(() => {
     dispatch((uiActions as any).resetFeeRateBar())
-  }
+  }, [dispatch])
 }
 
 export function useAddressInput() {
@@ -110,21 +116,24 @@ export function useAddressInput() {
 
 export function useUpdateAddressInput() {
   const dispatch = useAppDispatch()
-  return ({ address, domain }: { address?: string; domain?: string }) => {
-    dispatch(
-      (uiActions as any).updateAddressInput({
-        address,
-        domain,
-      })
-    )
-  }
+  return useCallback(
+    ({ address, domain }: { address?: string; domain?: string }) => {
+      dispatch(
+        (uiActions as any).updateAddressInput({
+          address,
+          domain,
+        })
+      )
+    },
+    [dispatch]
+  )
 }
 
 export function useResetAddressInput() {
   const dispatch = useAppDispatch()
-  return () => {
+  return useCallback(() => {
     dispatch((uiActions as any).resetAddressInput())
-  }
+  }, [dispatch])
 }
 
 export function useAmountInput() {
@@ -134,35 +143,38 @@ export function useAmountInput() {
 
 export function useUpdateAmountInput() {
   const dispatch = useAppDispatch()
-  return ({ amount }: { amount?: string }) => {
-    dispatch(
-      (uiActions as any).updateAmountInput({
-        amount,
-      })
-    )
-  }
+  return useCallback(
+    ({ amount }: { amount?: string }) => {
+      dispatch(
+        (uiActions as any).updateAmountInput({
+          amount,
+        })
+      )
+    },
+    [dispatch]
+  )
 }
 
 export function useResetAmountInput() {
   const dispatch = useAppDispatch()
-  return () => {
+  return useCallback(() => {
     dispatch((uiActions as any).resetAmountInput())
-  }
+  }, [dispatch])
 }
 
 export function useResetTxState() {
   const dispatch = useAppDispatch()
-  return () => {
+  return useCallback(() => {
     dispatch((uiActions as any).resetTxCreateScreen())
     dispatch((uiActions as any).resetFeeRateBar())
-  }
+  }, [dispatch])
 }
 
 export function useResetUiTxCreateScreen() {
   const dispatch = useAppDispatch()
-  return () => {
+  return useCallback(() => {
     dispatch((uiActions as any).resetTxCreateScreen())
-  }
+  }, [dispatch])
 }
 
 export const useThrottle = (callback, delay, lastCallRef) => {

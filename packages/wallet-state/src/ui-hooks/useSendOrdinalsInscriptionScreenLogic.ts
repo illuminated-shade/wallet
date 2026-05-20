@@ -1,15 +1,12 @@
 import { Inscription } from '@unisat/wallet-shared'
 import { useEffect, useMemo, useState } from 'react'
+import { useI18n, useNavigation, useTools, useWallet } from '../context'
 import {
   useFeeRateBar,
   useFetchUtxosCallback,
-  useI18n,
-  useNavigation,
   useOrdinalsTx,
   usePrepareSendOrdinalsInscriptionCallback,
-  useTools,
-  useWallet,
-} from '..'
+} from '../hooks'
 import { getAddressUtxoDust, isValidAddress } from '../utils/bitcoin-utils'
 
 export function useSendOrdinalsInscriptionScreenLogic() {
