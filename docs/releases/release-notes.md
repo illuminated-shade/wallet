@@ -1,5 +1,19 @@
 # UniSat Wallet Release Notes
 
+## v1.7.16
+
+### New Features
+
+- Added readonly wallet support for testing external PSBT/message signing flows. This is an experimental Developer Mode feature and is not recommended for production or high-value transactions.
+
+### Improvements
+
+- Added account capability checks so watch-only and fixed-address wallets hide or block unsupported send, merge, address type, account creation, and private key export actions.
+
+### Bug Fixes
+
+- Fixed repeated render/effect loops in transaction creation screens.
+
 ## v1.7.15
 
 ### New Features
