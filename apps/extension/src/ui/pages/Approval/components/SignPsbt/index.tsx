@@ -20,7 +20,8 @@ import {
   useBTCUnit,
   useCurrentAccountCapabilities,
   useI18n,
-  useSignPsbtLogic
+  useSignPsbtLogic,
+  useTools
 } from '@unisat/wallet-state';
 
 import ActionOverviewSection from './components/ActionOverviewSection';
@@ -87,6 +88,7 @@ function TransactionItem(
 
 export default function SignPsbt(props: SignPsbtProps) {
   const accountCapabilities = useCurrentAccountCapabilities();
+  const tools = useTools();
   const isReadonlySigning = accountCapabilities.signMethod === AccountSignMethod.External;
   const {
     showLoading,
@@ -323,16 +325,42 @@ export default function SignPsbt(props: SignPsbtProps) {
           <PsbtDataSection toSignData={currentToSignData} />
 
           {isReadonlySigning && (
-            <SignPsbtSection title={t('signed_psbt_data')}>
-              <Input
-                preset="text"
-                placeholder={t('signed_psbt_data')}
-                value={readonlySignedPsbtHex}
-                onChange={(e) => {
-                  setReadonlySignedPsbtHex(e.target.value.trim());
-                }}
-                data-testid="readonly-signed-psbt-input"
-              />
+            <SignPsbtSection title={t('readonly_signing')}>
+              <Card>
+                <Column gap="sm" fullX>
+                  <Text text={`1. ${t('readonly_signing_copy_step')}`} color="textDim" />
+
+                  <Button
+                    preset="defaultV2"
+                    onClick={() => {
+                      tools.copyToClipboard(
+                        JSON.stringify([
+                          currentToSignData.psbtHex,
+                          {
+                            autoFinalized: currentToSignData.autoFinalized !== false,
+                            toSignInputs: currentToSignData.toSignInputs
+                          }
+                        ])
+                      );
+                    }}
+                    text={t('readonly_signing_copy_button')}
+                  />
+                </Column>
+              </Card>
+              <Card>
+                <Column gap="sm" fullX>
+                  <Text text={`2. ${t('readonly_signing_paste_step')}`} color="textDim" />
+                  <Input
+                    preset="text"
+                    placeholder={t('readonly_signing_paste_placeholder')}
+                    value={readonlySignedPsbtHex}
+                    onChange={(e) => {
+                      setReadonlySignedPsbtHex(e.target.value.trim());
+                    }}
+                    data-testid="readonly-signed-psbt-input"
+                  />
+                </Column>
+              </Card>
             </SignPsbtSection>
           )}
         </Column>

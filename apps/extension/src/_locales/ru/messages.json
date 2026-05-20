@@ -2698,5 +2698,29 @@
   },
   "readonly_wallet": {
     "message": "Кошелек только для чтения"
+  },
+  "copy_signing_params": {
+    "message": "Скопировать параметры подписи"
+  },
+  "readonly_signing": {
+    "message": "Офлайн-подпись"
+  },
+  "readonly_signing_copy_step": {
+    "message": "Скопируйте запрос на подпись"
+  },
+  "readonly_signing_copy_button": {
+    "message": "Скопировать запрос"
+  },
+  "readonly_signing_paste_step": {
+    "message": "Вставьте подписанный PSBT"
+  },
+  "readonly_signing_paste_placeholder": {
+    "message": "Hex подписанного PSBT"
+  },
+  "readonly_signing_paste_signature_step": {
+    "message": "Вставьте подпись"
+  },
+  "readonly_signing_signature_placeholder": {
+    "message": "Подпись"
   }
 }

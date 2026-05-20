@@ -2698,5 +2698,29 @@
   },
   "readonly_wallet": {
     "message": "Portefeuille en lecture seule"
+  },
+  "copy_signing_params": {
+    "message": "Copier les paramètres de signature"
+  },
+  "readonly_signing": {
+    "message": "Signature hors ligne"
+  },
+  "readonly_signing_copy_step": {
+    "message": "Copier la demande de signature"
+  },
+  "readonly_signing_copy_button": {
+    "message": "Copier la demande"
+  },
+  "readonly_signing_paste_step": {
+    "message": "Coller le PSBT signé"
+  },
+  "readonly_signing_paste_placeholder": {
+    "message": "Hex du PSBT signé"
+  },
+  "readonly_signing_paste_signature_step": {
+    "message": "Coller la signature"
+  },
+  "readonly_signing_signature_placeholder": {
+    "message": "Signature"
   }
 }

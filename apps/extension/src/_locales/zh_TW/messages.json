@@ -2701,5 +2701,29 @@
   },
   "readonly_wallet": {
     "message": "只讀錢包"
+  },
+  "copy_signing_params": {
+    "message": "複製簽署參數"
+  },
+  "readonly_signing": {
+    "message": "離線簽署"
+  },
+  "readonly_signing_copy_step": {
+    "message": "複製簽署請求"
+  },
+  "readonly_signing_copy_button": {
+    "message": "複製請求"
+  },
+  "readonly_signing_paste_step": {
+    "message": "貼上已簽署 PSBT"
+  },
+  "readonly_signing_paste_placeholder": {
+    "message": "已簽署 PSBT Hex"
+  },
+  "readonly_signing_paste_signature_step": {
+    "message": "貼上簽名"
+  },
+  "readonly_signing_signature_placeholder": {
+    "message": "簽名"
   }
 }

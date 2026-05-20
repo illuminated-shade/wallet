@@ -2689,5 +2689,29 @@
   },
   "readonly_wallet": {
     "message": "Billetera de solo lectura"
+  },
+  "copy_signing_params": {
+    "message": "Copiar parámetros de firma"
+  },
+  "readonly_signing": {
+    "message": "Firma sin conexión"
+  },
+  "readonly_signing_copy_step": {
+    "message": "Copiar la solicitud de firma"
+  },
+  "readonly_signing_copy_button": {
+    "message": "Copiar solicitud"
+  },
+  "readonly_signing_paste_step": {
+    "message": "Pegar el PSBT firmado"
+  },
+  "readonly_signing_paste_placeholder": {
+    "message": "Hex del PSBT firmado"
+  },
+  "readonly_signing_paste_signature_step": {
+    "message": "Pegar la firma"
+  },
+  "readonly_signing_signature_placeholder": {
+    "message": "Firma"
   }
 }

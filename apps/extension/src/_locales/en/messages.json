@@ -2704,5 +2704,29 @@
   },
   "readonly_wallet": {
     "message": "Readonly Wallet"
+  },
+  "copy_signing_params": {
+    "message": "Copy signing parameters"
+  },
+  "readonly_signing": {
+    "message": "Offline signing"
+  },
+  "readonly_signing_copy_step": {
+    "message": "Copy the signing request"
+  },
+  "readonly_signing_copy_button": {
+    "message": "Copy request"
+  },
+  "readonly_signing_paste_step": {
+    "message": "Paste the signed PSBT"
+  },
+  "readonly_signing_paste_placeholder": {
+    "message": "Signed PSBT hex"
+  },
+  "readonly_signing_paste_signature_step": {
+    "message": "Paste the signature"
+  },
+  "readonly_signing_signature_placeholder": {
+    "message": "Signature"
   }
 }

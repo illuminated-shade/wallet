@@ -2698,5 +2698,29 @@
   },
   "readonly_wallet": {
     "message": "読み取り専用ウォレット"
+  },
+  "copy_signing_params": {
+    "message": "署名パラメータをコピー"
+  },
+  "readonly_signing": {
+    "message": "オフライン署名"
+  },
+  "readonly_signing_copy_step": {
+    "message": "署名リクエストをコピー"
+  },
+  "readonly_signing_copy_button": {
+    "message": "リクエストをコピー"
+  },
+  "readonly_signing_paste_step": {
+    "message": "署名済みPSBTを貼り付け"
+  },
+  "readonly_signing_paste_placeholder": {
+    "message": "署名済みPSBT Hex"
+  },
+  "readonly_signing_paste_signature_step": {
+    "message": "署名を貼り付け"
+  },
+  "readonly_signing_signature_placeholder": {
+    "message": "署名"
   }
 }
