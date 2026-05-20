@@ -135,4 +135,25 @@ describe('WalletProvider network change handling', () => {
 
     expect(wallet.disconnect).toHaveBeenCalledTimes(1)
   })
+
+  it('keeps the wallet connected when account is temporarily unavailable during change events', async () => {
+    const { wallet, getListener } = createWallet()
+    vi.mocked(wallet.getAccount).mockResolvedValue(undefined)
+
+    await renderConnectedProvider({ wallet })
+
+    await getListener()?.onAccountChange()
+
+    expect(wallet.disconnect).not.toHaveBeenCalled()
+  })
+
+  it('disconnects when accountsChanged explicitly reports no accounts', async () => {
+    const { wallet, getListener } = createWallet()
+
+    await renderConnectedProvider({ wallet })
+
+    await getListener()?.onAccountChange([])
+
+    expect(wallet.disconnect).toHaveBeenCalledTimes(1)
+  })
 })

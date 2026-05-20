@@ -170,8 +170,7 @@ export function WalletProvider({
   useEffect(() => {
     if (!wallet) return
 
-    const handleAccountChange = async () => {
-      setAccount(undefined)
+    const handleConnectionRefresh = async (options: { disconnectOnUnavailable: boolean }) => {
       setIsConnecting(true)
 
       try {
@@ -179,14 +178,26 @@ export function WalletProvider({
         if (connectedAccount) {
           setAccount(connectedAccount)
           onAccountChange?.(connectedAccount)
-        } else {
+        } else if (options.disconnectOnUnavailable) {
           disconnect()
         }
       } catch {
+        if (!options.disconnectOnUnavailable) {
+          return
+        }
         disconnect()
       } finally {
         setIsConnecting(false)
       }
+    }
+
+    const handleAccountChange = async (accounts?: unknown) => {
+      if (Array.isArray(accounts) && accounts.length === 0) {
+        disconnect()
+        return
+      }
+
+      await handleConnectionRefresh({ disconnectOnUnavailable: false })
     }
 
     const handleNetworkChange = async () => {
@@ -195,16 +206,7 @@ export function WalletProvider({
         return
       }
 
-      try {
-        const connectedAccount = await loadConnectedAccount(wallet)
-        if (connectedAccount) {
-          setAccount(connectedAccount)
-          onAccountChange?.(connectedAccount)
-        }
-      } catch {
-        // Keep the existing connection state. Some wallets keep accounts
-        // connected while getAccount is temporarily unavailable during switch.
-      }
+      await handleConnectionRefresh({ disconnectOnUnavailable: false })
     }
 
     wallet.addListener({
