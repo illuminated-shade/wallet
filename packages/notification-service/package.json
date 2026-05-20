@@ -29,7 +29,8 @@
     "test:watch": "vitest",
     "lint": "eslint src --ext .ts,.tsx",
     "typecheck": "tsc --noEmit",
-    "clean": "rimraf dist"
+    "clean": "rimraf dist",
+    "prepublishOnly": "pnpm clean && pnpm test && pnpm build"
   },
   "keywords": [
     "bitcoin",

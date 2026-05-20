@@ -32,7 +32,7 @@
     "clean": "rm -rf lib coverage",
     "dev": "tsup --watch",
     "typecheck": "tsc --noEmit",
-    "prepublishOnly": "pnpm clean && pnpm run build:all && pnpm test"
+    "prepublishOnly": "pnpm clean && pnpm test && pnpm run build:all"
   },
   "keywords": [
     "bitcoin",

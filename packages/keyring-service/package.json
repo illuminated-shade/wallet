@@ -30,7 +30,7 @@
     "lint": "eslint src --ext .ts,.js",
     "clean": "rm -rf lib",
     "dev": "tsup --watch",
-    "prepublishOnly": "yarn clean && yarn build"
+    "prepublishOnly": "pnpm clean && pnpm test && pnpm build"
   },
   "keywords": [
     "bitcoin",
