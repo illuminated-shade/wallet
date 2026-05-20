@@ -1775,6 +1775,9 @@
   "psbt_data": {
     "message": "PSBTデータ:"
   },
+  "signed_psbt_data": {
+    "message": "署名済みPSBTデータ"
+  },
   "public_key_must_be_compressed_secp256k1_ie_33_byte": {
     "message": "公開鍵は圧縮されたsecp256k1（つまり、0x02または0x03で始まる33バイト）である必要があります"
   },
@@ -2671,5 +2674,29 @@
   },
   "your_balance_have_to_be_merged": {
     "message": "あなたの"
+  },
+  "connect_to_readonly_wallet": {
+    "message": "読み取り専用ウォレットに接続"
+  },
+  "copy_message_to_sign": {
+    "message": "署名するメッセージをコピー"
+  },
+  "create_readonly_wallet": {
+    "message": "読み取り専用ウォレットを作成"
+  },
+  "enter_your_signature": {
+    "message": "署名を入力してください"
+  },
+  "invalid_signature": {
+    "message": "無効な署名です"
+  },
+  "please_enter_your_signature": {
+    "message": "署名を入力してください"
+  },
+  "public_key": {
+    "message": "公開鍵"
+  },
+  "readonly_wallet": {
+    "message": "読み取り専用ウォレット"
   }
 }

@@ -1775,6 +1775,9 @@
   "psbt_data": {
     "message": "Данные PSBT:"
   },
+  "signed_psbt_data": {
+    "message": "Данные подписанного PSBT"
+  },
   "public_key_must_be_compressed_secp256k1_ie_33_byte": {
     "message": "Публичный ключ должен быть сжатым secp256k1, т.е. 33 байта, начинающихся с 0x02 или 0x03"
   },
@@ -2671,5 +2674,29 @@
   },
   "your_balance_have_to_be_merged": {
     "message": "Ваш "
+  },
+  "connect_to_readonly_wallet": {
+    "message": "Подключить кошелек только для чтения"
+  },
+  "copy_message_to_sign": {
+    "message": "Скопировать сообщение для подписи"
+  },
+  "create_readonly_wallet": {
+    "message": "Создать кошелек только для чтения"
+  },
+  "enter_your_signature": {
+    "message": "Введите вашу подпись"
+  },
+  "invalid_signature": {
+    "message": "Недействительная подпись"
+  },
+  "please_enter_your_signature": {
+    "message": "Пожалуйста, введите вашу подпись"
+  },
+  "public_key": {
+    "message": "Публичный ключ"
+  },
+  "readonly_wallet": {
+    "message": "Кошелек только для чтения"
   }
 }

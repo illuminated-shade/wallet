@@ -1,7 +1,7 @@
 import VirtualList, { ListRef } from 'rc-virtual-list';
 import { forwardRef, useEffect, useRef } from 'react';
 
-import { Button, Card, Column, Content, Footer, Header, Layout, Row, Text } from '@/ui/components';
+import { Button, Card, Column, Content, Footer, Header, Input, Layout, Row, Text } from '@/ui/components';
 import { BtcUsd } from '@/ui/components/BtcUsd';
 import ColdWalletSignPsbt from '@/ui/components/ColdWallet/ColdWalletSignPsbt';
 import { ContractPopover } from '@/ui/components/ContractPopover';
@@ -13,7 +13,15 @@ import KeystoneSignScreen from '@/ui/pages/Wallet/KeystoneSignScreen';
 import { fontSizes } from '@/ui/theme/font';
 import { numUtils } from '@unisat/base-utils';
 import { KeystoneSignEnum } from '@unisat/keyring-service/types';
-import { PsbtLocalInfo, SignPsbtProps, useBTCUnit, useI18n, useSignPsbtLogic } from '@unisat/wallet-state';
+import { KeyringType } from '@unisat/wallet-shared';
+import {
+  PsbtLocalInfo,
+  SignPsbtProps,
+  useBTCUnit,
+  useCurrentAccount,
+  useI18n,
+  useSignPsbtLogic
+} from '@unisat/wallet-state';
 
 import ActionOverviewSection from './components/ActionOverviewSection';
 import AssetOverviewSection from './components/AssetOverviewSection';
@@ -78,6 +86,9 @@ function TransactionItem(
 }
 
 export default function SignPsbt(props: SignPsbtProps) {
+  const account = useCurrentAccount();
+  const isReadonlySigning =
+    account.type === KeyringType.ReadonlyKeyring || account.type === KeyringType.WatchAddressKeyring;
   const {
     showLoading,
     isPsbtRiskPopoverVisible,
@@ -93,6 +104,8 @@ export default function SignPsbt(props: SignPsbtProps) {
     toSignDatas,
     currentToSignData,
     currentDecodedPsbt,
+    readonlySignedPsbtHex,
+    setReadonlySignedPsbtHex,
 
     // signing state
     isKeystoneSigning,
@@ -309,6 +322,20 @@ export default function SignPsbt(props: SignPsbtProps) {
 
           {/* PSBT data */}
           <PsbtDataSection toSignData={currentToSignData} />
+
+          {isReadonlySigning && (
+            <SignPsbtSection title={t('signed_psbt_data')}>
+              <Input
+                preset="text"
+                placeholder={t('signed_psbt_data')}
+                value={readonlySignedPsbtHex}
+                onChange={(e) => {
+                  setReadonlySignedPsbtHex(e.target.value.trim());
+                }}
+                data-testid="readonly-signed-psbt-input"
+              />
+            </SignPsbtSection>
+          )}
         </Column>
       </Content>
 

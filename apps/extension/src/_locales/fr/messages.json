@@ -1775,6 +1775,9 @@
   "psbt_data": {
     "message": "Données PSBT :"
   },
+  "signed_psbt_data": {
+    "message": "Données PSBT signées"
+  },
   "public_key_must_be_compressed_secp256k1_ie_33_byte": {
     "message": "La clé publique doit être secp256k1 compressée, c'est-à-dire 33 octets commençant par 0x02 ou 0x03"
   },
@@ -2671,5 +2674,29 @@
   },
   "your_balance_have_to_be_merged": {
     "message": "Votre "
+  },
+  "connect_to_readonly_wallet": {
+    "message": "Connecter un portefeuille en lecture seule"
+  },
+  "copy_message_to_sign": {
+    "message": "Copier le message à signer"
+  },
+  "create_readonly_wallet": {
+    "message": "Créer un portefeuille en lecture seule"
+  },
+  "enter_your_signature": {
+    "message": "Saisissez votre signature"
+  },
+  "invalid_signature": {
+    "message": "Signature invalide"
+  },
+  "please_enter_your_signature": {
+    "message": "Veuillez saisir votre signature"
+  },
+  "public_key": {
+    "message": "Clé publique"
+  },
+  "readonly_wallet": {
+    "message": "Portefeuille en lecture seule"
   }
 }

@@ -1781,6 +1781,9 @@
   "psbt_data": {
     "message": "PSBT Data:"
   },
+  "signed_psbt_data": {
+    "message": "Signed PSBT Data"
+  },
   "public_key_must_be_compressed_secp256k1_ie_33_byte": {
     "message": "Public key must be compressed secp256k1, i.e. 33 bytes starting with 0x02 or 0x03"
   },
@@ -2677,5 +2680,29 @@
   },
   "your_balance_have_to_be_merged": {
     "message": "Your "
+  },
+  "connect_to_readonly_wallet": {
+    "message": "Connect to Readonly Wallet"
+  },
+  "copy_message_to_sign": {
+    "message": "Copy message to sign"
+  },
+  "create_readonly_wallet": {
+    "message": "Create Readonly Wallet"
+  },
+  "enter_your_signature": {
+    "message": "Enter your signature"
+  },
+  "invalid_signature": {
+    "message": "Invalid signature"
+  },
+  "please_enter_your_signature": {
+    "message": "Please enter your signature"
+  },
+  "public_key": {
+    "message": "Public Key"
+  },
+  "readonly_wallet": {
+    "message": "Readonly Wallet"
   }
 }

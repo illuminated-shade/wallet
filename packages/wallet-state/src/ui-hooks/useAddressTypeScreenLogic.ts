@@ -77,8 +77,11 @@ export function useAddressTypeScreenLogic() {
   }, [])
 
   const addressTypes = useMemo(() => {
-    // Cold wallets do not allow switching address types, only show the current type
-    if (currentKeyring.type === KeyringType.ColdWalletKeyring) {
+    // Wallets backed by a fixed address do not allow switching address types.
+    if (
+      currentKeyring.type === KeyringType.ColdWalletKeyring ||
+      currentKeyring.type === KeyringType.WatchAddressKeyring
+    ) {
       return ADDRESS_TYPES.filter(v => v.value === currentKeyring.addressType)
     }
 
@@ -115,7 +118,11 @@ export function useAddressTypeScreenLogic() {
         satoshis: 0,
         total_inscription: 0,
       }
-      const derivedPath = getAccountDerivationPath(v.hdPath, account.index || 0, currentKeyring.accountIndexDerivation)
+      const derivedPath = getAccountDerivationPath(
+        v.hdPath,
+        account.index || 0,
+        currentKeyring.accountIndexDerivation
+      )
       let name = `${v.name} (${derivedPath})`
       if (currentKeyring.type === KeyringType.SimpleKeyring) {
         name = `${v.name}`
@@ -137,9 +144,11 @@ export function useAddressTypeScreenLogic() {
       return
     }
 
-    // Cold wallets do not allow switching address types
-    if (currentKeyring.type === KeyringType.ColdWalletKeyring) {
-      tools.toastError(t('Cold wallet address type cannot be changed'))
+    if (
+      currentKeyring.type === KeyringType.ColdWalletKeyring ||
+      currentKeyring.type === KeyringType.WatchAddressKeyring
+    ) {
+      tools.toastError(t('not_supported'))
       return
     }
 

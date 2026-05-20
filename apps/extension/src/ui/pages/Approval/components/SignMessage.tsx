@@ -1,12 +1,12 @@
-import { Button, Card, Column, Content, Footer, Header, Layout, Row, Text } from '@/ui/components';
+import { Button, Card, Column, Content, Footer, Header, Icon, Input, Layout, Row, Text } from '@/ui/components';
 import { ColdWalletSignMessage } from '@/ui/components/ColdWallet';
 import LoadingPage from '@/ui/components/LoadingPage';
 import { PhishingDetection } from '@/ui/components/PhishingDetection';
 import WebsiteBar from '@/ui/components/WebsiteBar';
 import { fontSizes } from '@/ui/theme/font';
 import { KeystoneSignEnum } from '@unisat/keyring-service/types';
-import { SignMessageType } from '@unisat/wallet-shared';
-import { SignMessageProps, useSignMessageLogic } from '@unisat/wallet-state';
+import { KeyringType, SignMessageType } from '@unisat/wallet-shared';
+import { SignMessageProps, useCurrentAccount, useSignMessageLogic, useTools } from '@unisat/wallet-state';
 
 import KeystoneSignScreen from '../../Wallet/KeystoneSignScreen';
 import MultiSignDisclaimerModal from './SignPsbt/components/MultiSignDisclaimerModal';
@@ -50,8 +50,14 @@ export default function SignMessage(props: SignMessageProps) {
     onColdWalletSigningSuccess,
     onColdWalletSigningBack,
 
+    readonlySignature,
+    setReadonlySignature,
+
     onDisclaimerModalClose
   } = useSignMessageLogic(props);
+  const account = useCurrentAccount();
+  const tools = useTools();
+  const isReadonly = account.type === KeyringType.ReadonlyKeyring;
 
   let header = props.header;
 
@@ -187,10 +193,36 @@ export default function SignMessage(props: SignMessageProps) {
                 whiteSpace: 'pre-wrap',
                 wordBreak: 'break-word',
                 flexWrap: 'wrap'
-              }}>
+              }}
+            >
               {currentToSignMessage.text}
             </div>
           </Card>
+          {isReadonly && (
+            <>
+              <Row
+                itemsCenter
+                gap="sm"
+                onClick={() => {
+                  const base64Text = Buffer.from(currentToSignMessage.text).toString('base64');
+                  tools.copyToClipboard(base64Text);
+                }}
+              >
+                <Icon icon="copy" color="textDim" />
+                <Text text={t('copy_message_to_sign')} color="textDim" />
+              </Row>
+
+              <Input
+                preset="text"
+                placeholder={t('enter_your_signature')}
+                autoFocus
+                value={readonlySignature}
+                onChange={(e) => {
+                  setReadonlySignature(e.target.value.trim());
+                }}
+              />
+            </>
+          )}
         </Column>
       </Content>
 

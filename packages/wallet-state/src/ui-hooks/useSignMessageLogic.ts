@@ -36,6 +36,7 @@ export function useSignMessageLogic(props: SignMessageProps) {
   const [loading, setLoading] = useState(false)
   const [isKeystoneSigning, setIsKeystoneSigning] = useState(false)
   const [isColdWalletSigning, setIsColdWalletSigning] = useState(false)
+  const [readonlySignature, setReadonlySignature] = useState('')
 
   const wallet = useWallet()
   const tools = useTools()
@@ -67,7 +68,8 @@ export function useSignMessageLogic(props: SignMessageProps) {
 
     if (
       keyringType === KeyringType.KeystoneKeyring ||
-      keyringType === KeyringType.ColdWalletKeyring
+      keyringType === KeyringType.ColdWalletKeyring ||
+      keyringType === KeyringType.ReadonlyKeyring
     ) {
       return
     }
@@ -194,6 +196,14 @@ export function useSignMessageLogic(props: SignMessageProps) {
       setIsKeystoneSigning(true)
     } else if (keyringType === KeyringType.ColdWalletKeyring) {
       setIsColdWalletSigning(true)
+    } else if (keyringType === KeyringType.ReadonlyKeyring) {
+      if (!readonlySignature) {
+        tools.toastError(t('please_enter_your_signature'))
+        return
+      }
+
+      onSignedData({ signature: readonlySignature }, signingTxIndex)
+      setReadonlySignature('')
     } else {
       localSign()
     }
@@ -296,6 +306,9 @@ export function useSignMessageLogic(props: SignMessageProps) {
 
     onColdWalletSigningSuccess,
     onColdWalletSigningBack,
+
+    readonlySignature,
+    setReadonlySignature,
 
     onDisclaimerModalClose,
   }

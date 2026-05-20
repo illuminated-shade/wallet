@@ -69,7 +69,12 @@ export function useSettingsTabScreenLogic() {
     let value = ''
     const item = ADDRESS_TYPES[currentKeyring.addressType]
     const hdPath = currentKeyring.hdPath || item.hdPath
-    if (currentKeyring.type === KeyringType.SimpleKeyring) {
+    if (
+      currentKeyring.type === KeyringType.SimpleKeyring ||
+      currentKeyring.type === KeyringType.ReadonlyKeyring ||
+      currentKeyring.type === KeyringType.WatchAddressKeyring ||
+      currentKeyring.type === KeyringType.ColdWalletKeyring
+    ) {
       value = `${item.name}`
     } else {
       value = `${item.name} (${hdPath}/${currentAccount.index})`

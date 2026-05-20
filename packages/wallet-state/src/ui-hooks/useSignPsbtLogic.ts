@@ -87,6 +87,7 @@ export function useSignPsbtLogic(props: SignPsbtProps) {
   const [isPsbtRiskPopoverVisible, setIsPsbtRiskPopoverVisible] = useState(false)
   const [isKeystoneSigning, setIsKeystoneSigning] = useState(false)
   const [isColdWalletSigning, setIsColdWalletSigning] = useState(false)
+  const [readonlySignedPsbtHex, setReadonlySignedPsbtHex] = useState('')
 
   const [contractPopoverData, setContractPopoverData] = useState(undefined)
 
@@ -124,7 +125,9 @@ export function useSignPsbtLogic(props: SignPsbtProps) {
 
     if (
       keyringType === KeyringType.KeystoneKeyring ||
-      keyringType === KeyringType.ColdWalletKeyring
+      keyringType === KeyringType.ColdWalletKeyring ||
+      keyringType === KeyringType.ReadonlyKeyring ||
+      keyringType === KeyringType.WatchAddressKeyring
     ) {
       return
     }
@@ -378,6 +381,17 @@ export function useSignPsbtLogic(props: SignPsbtProps) {
       setIsKeystoneSigning(true)
     } else if (keyringType === KeyringType.ColdWalletKeyring) {
       setIsColdWalletSigning(true)
+    } else if (
+      keyringType === KeyringType.ReadonlyKeyring ||
+      keyringType === KeyringType.WatchAddressKeyring
+    ) {
+      if (!readonlySignedPsbtHex) {
+        tools.toastError(t('invalid_psbt'))
+        return
+      }
+
+      onSignedData({ psbtHex: readonlySignedPsbtHex }, signingTxIndex)
+      setReadonlySignedPsbtHex('')
     } else {
       localSign()
     }
@@ -481,6 +495,8 @@ export function useSignPsbtLogic(props: SignPsbtProps) {
     toSignDatas,
     currentToSignData,
     currentDecodedPsbt,
+    readonlySignedPsbtHex,
+    setReadonlySignedPsbtHex,
 
     // state
     networkFee,

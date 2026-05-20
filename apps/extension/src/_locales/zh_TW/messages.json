@@ -1778,6 +1778,9 @@
   "psbt_data": {
     "message": "PSBT 資料："
   },
+  "signed_psbt_data": {
+    "message": "已簽名 PSBT 資料"
+  },
   "public_key_must_be_compressed_secp256k1_ie_33_byte": {
     "message": "公鑰必須是壓縮的 secp256k1，即 33 位元組，以 0x02 或 0x03 開頭"
   },
@@ -2674,5 +2677,29 @@
   },
   "your_balance_have_to_be_merged": {
     "message": "您的 "
+  },
+  "connect_to_readonly_wallet": {
+    "message": "連接只讀錢包"
+  },
+  "copy_message_to_sign": {
+    "message": "複製待簽署訊息"
+  },
+  "create_readonly_wallet": {
+    "message": "建立只讀錢包"
+  },
+  "enter_your_signature": {
+    "message": "輸入您的簽名"
+  },
+  "invalid_signature": {
+    "message": "無效的簽名"
+  },
+  "please_enter_your_signature": {
+    "message": "請輸入您的簽名"
+  },
+  "public_key": {
+    "message": "公鑰"
+  },
+  "readonly_wallet": {
+    "message": "只讀錢包"
   }
 }

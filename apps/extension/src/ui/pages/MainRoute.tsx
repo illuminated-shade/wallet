@@ -26,6 +26,7 @@ import CreateColdWalletScreen from './Account/CreateColdWalletScreen';
 import CreateHDWalletScreen from './Account/CreateHDWalletScreen';
 import CreateKeystoneWalletScreen from './Account/CreateKeystoneWalletScreen';
 import CreatePasswordScreen from './Account/CreatePasswordScreen';
+import CreateReadonlyWalletScreen from './Account/CreateReadonlyWalletScreen';
 import CreateSimpleWalletScreen from './Account/CreateSimpleWalletScreen';
 import CreateWatchWalletScreen from './Account/CreateWatchWalletScreen';
 import SwitchAccountScreen from './Account/SwitchAccountScreen';
@@ -84,6 +85,8 @@ import TxCreateScreen from './Wallet/TxCreateScreen';
 import TxFailScreen from './Wallet/TxFailScreen';
 import TxSuccessScreen from './Wallet/TxSuccessScreen';
 import './index.module.less';
+
+const isDevelopment = process.env.NODE_ENV === 'development';
 
 export const routes = {
   BoostScreen: {
@@ -234,6 +237,10 @@ export const routes = {
     path: '/account/create-cold-wallet',
     element: <CreateColdWalletScreen />
   },
+  CreateReadonlyWalletScreen: {
+    path: '/account/create-readonly-wallet',
+    element: <CreateReadonlyWalletScreen />
+  },
 
   UpgradeNoticeScreen: {
     path: '/settings/upgrade-notice',
@@ -368,7 +375,7 @@ export const routes = {
   }
 };
 
-if (process.env.NODE_ENV === 'development') {
+if (isDevelopment) {
   routes['TestScreen'] = {
     path: '/test',
     element: <TestScreen />
@@ -544,7 +551,8 @@ const Main = () => {
           height: '00vh',
           overflowY: 'auto',
           overflowX: 'hidden'
-        }}>
+        }}
+      >
         <Content justifyCenter itemsCenter>
           <Icon>
             <LoadingOutlined />

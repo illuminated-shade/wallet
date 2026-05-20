@@ -299,6 +299,9 @@ export class WalletController extends BaseController {
     if (!isValidPassword) {
       throw new Error(t('password_error'))
     }
+    if (type !== KeyringType.HdKeyring && type !== KeyringType.SimpleKeyring) {
+      throw new Error(t('not_supported'))
+    }
     const keyring = await keyringService.getKeyringForAccount(pubkey, type)
     if (!keyring) return null
     const privateKey = await keyring.exportAccount(pubkey)
@@ -620,6 +623,9 @@ export class WalletController extends BaseController {
   }
 
   deriveNewAccountFromMnemonic = async (keyring: WalletKeyring, alianName?: string) => {
+    if (keyring.type !== KeyringType.HdKeyring && keyring.type !== KeyringType.KeystoneKeyring) {
+      throw new Error(t('not_supported'))
+    }
     const _keyring = keyringService.keyrings[keyring.index]!
     await keyringService.addNewAccount(_keyring)
 
@@ -671,6 +677,13 @@ export class WalletController extends BaseController {
 
   changeAddressType = async (addressType: AddressType) => {
     const currentAccount = await this.getCurrentAccount()
+    const currentKeyring = await this.getCurrentKeyring()
+    if (
+      currentKeyring?.type === KeyringType.ColdWalletKeyring ||
+      currentKeyring?.type === KeyringType.WatchAddressKeyring
+    ) {
+      throw new Error(t('not_supported'))
+    }
     const currentKeyringIndex = preferenceService.getCurrentKeyringIndex()
     await keyringService.changeAddressType(currentKeyringIndex, addressType)
     const keyring = await this.getCurrentKeyring()
@@ -944,6 +957,12 @@ export class WalletController extends BaseController {
   _signPsbt = async (psbt: bitcoin.Psbt, toSignInputs: ToSignInput[], autoFinalized: boolean) => {
     const account = await this.getCurrentAccount()
     if (!account) throw new Error('no current account')
+    if (
+      account.type === KeyringType.ReadonlyKeyring ||
+      account.type === KeyringType.WatchAddressKeyring
+    ) {
+      throw new Error(t('not_supported'))
+    }
 
     const keyring = await this.getCurrentKeyring()
     if (!keyring) throw new Error('no current keyring')
@@ -992,6 +1011,10 @@ export class WalletController extends BaseController {
 
     const account = preferenceService.getCurrentAccount()
     if (!account) throw new Error('no current account')
+
+    if (account.type === KeyringType.ReadonlyKeyring) {
+      throw new Error('Readonly wallet cannot sign messages')
+    }
 
     const networkType = this.getNetworkType()
     if (params.type === SignMessageType.BIP322_SIMPLE) {
