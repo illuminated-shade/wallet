@@ -1130,6 +1130,9 @@
   "invalid_psbt": {
     "message": "invalid psbt"
   },
+  "invalid_public_key": {
+    "message": "Invalid Public Key"
+  },
   "invalid_public_key_in_tosigninput": {
     "message": "invalid public key in toSignInput"
   },

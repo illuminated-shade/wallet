@@ -12,6 +12,13 @@ import { AddressType } from '@unisat/wallet-types';
 import { useNavigate } from '../MainRoute';
 import { TabType } from './createHDWalletComponents/types';
 
+const isHexString = (value: string) => /^[0-9a-fA-F]+$/.test(value);
+
+const isValidReadonlyPublicKeyInput = (value: string) => {
+  const byteLength = value.length / 2;
+  return value.length % 2 === 0 && isHexString(value) && byteLength >= 32 && byteLength <= 65;
+};
+
 function Step1({
   contextData,
   updateContextData
@@ -26,23 +33,28 @@ function Step1({
   const { t } = useI18n();
 
   useEffect(() => {
-    setDisabled(!pubkey);
+    setDisabled(!isValidReadonlyPublicKeyInput(pubkey));
   }, [pubkey]);
 
   const onChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const val = e.target.value.trim();
     setPubkey(val);
-    updateContextData({ step1Completed: Boolean(val) });
+    updateContextData({ step1Completed: isValidReadonlyPublicKeyInput(val) });
   };
 
   const btnClick = async () => {
+    if (!isValidReadonlyPublicKeyInput(pubkey)) {
+      tools.toastError(t('invalid_public_key'));
+      return;
+    }
+
     try {
       const keyring = await wallet.createTmpKeyringWithPublicKey(pubkey, AddressType.P2TR);
       if (keyring.accounts.length == 0) {
-        throw new Error(t('invalid_public_key_in_tosigninput'));
+        throw new Error(t('invalid_public_key'));
       }
     } catch (e) {
-      tools.toastError((e as Error).message);
+      tools.toastError(t('invalid_public_key'));
       return;
     }
 

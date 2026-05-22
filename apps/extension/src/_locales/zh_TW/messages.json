@@ -1124,6 +1124,9 @@
   "invalid_psbt": {
     "message": "無效的 PSBT"
   },
+  "invalid_public_key": {
+    "message": "無效的公鑰"
+  },
   "invalid_public_key_in_tosigninput": {
     "message": "toSignInput 中的公鑰無效"
   },

@@ -1124,6 +1124,9 @@
   "invalid_psbt": {
     "message": "неверный PSBT"
   },
+  "invalid_public_key": {
+    "message": "Неверный публичный ключ"
+  },
   "invalid_public_key_in_tosigninput": {
     "message": "неверный публичный ключ в toSignInput"
   },
