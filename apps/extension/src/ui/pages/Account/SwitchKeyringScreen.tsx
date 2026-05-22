@@ -206,6 +206,7 @@ export function MyItem({ keyring, autoNav }: MyItemProps, ref) {
               )}
               <Row
                 onClick={() => {
+                  // TODO: Treat corrupted keyrings separately in this "last wallet" check.
                   if (keyrings.length == 1) {
                     tools.toastError(t('removing_the_last_wallet_is_not_allowed'));
                     return;

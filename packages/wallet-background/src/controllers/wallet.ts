@@ -91,6 +91,13 @@ import approvalService from 'src/services/approval'
 import { ContactBookItem } from '../services/contactBook'
 import BaseController from './base'
 
+type CorruptedWalletKeyring = WalletKeyring & {
+  isCorrupted: true
+  corruptedReason: string
+}
+
+export type WalletKeyringWithStatus = WalletKeyring | CorruptedWalletKeyring
+
 export type AccountAsset = {
   name: string
   symbol: string
@@ -111,6 +118,18 @@ const caculateTapLeafHash = (input: any, pubkey: Buffer) => {
   })
 
   return tapLeafHashes.map(each => each.hash)
+}
+
+export function canDeriveAddressFromPublicKey(
+  pubkey: string,
+  addressType: AddressType,
+  networkType: NetworkType
+) {
+  try {
+    return Boolean(publicKeyToAddress(pubkey, addressType, networkType))
+  } catch (e) {
+    return false
+  }
 }
 
 function assertCanCreateSigningRequest(account: Account | null | undefined) {
@@ -664,7 +683,11 @@ export class WalletController extends BaseController {
     return accounts.filter(x => x).length
   }
 
-  changeKeyring = async (keyring: WalletKeyring, accountIndex = 0) => {
+  changeKeyring = async (keyring: WalletKeyringWithStatus, accountIndex = 0) => {
+    if (!this.isUsableKeyring(keyring)) {
+      throw new Error('Keyring is corrupted')
+    }
+
     preferenceService.setCurrentKeyringIndex(keyring.index)
     const account = keyring.accounts[accountIndex]!
     preferenceService.setCurrentAccount(account)
@@ -1721,17 +1744,85 @@ export class WalletController extends BaseController {
     return keyring
   }
 
-  getKeyrings = async (): Promise<WalletKeyring[]> => {
+  corruptedDisplayedKeyringToWalletKeyring = (
+    displayedKeyring: DisplayedKeyring,
+    index: number,
+    corruptedReason: string,
+    initName = true
+  ): CorruptedWalletKeyring => {
+    const key = 'keyring_' + index
+    const type = displayedKeyring.type
+    const alianName = preferenceService.getKeyringAlianName(
+      key,
+      initName ? `${KEYRING_TYPES[type]!.alianName} #${index + 1}` : ''
+    )!
+
+    return {
+      index,
+      key,
+      type,
+      addressType: displayedKeyring.addressType,
+      accounts: [],
+      alianName,
+      hdPath: '',
+      accountIndexDerivation: false,
+      isCorrupted: true,
+      corruptedReason,
+    }
+  }
+
+  safeDisplayedKeyringToWalletKeyring = (
+    displayedKeyring: DisplayedKeyring | undefined,
+    index: number,
+    initName = true
+  ): WalletKeyringWithStatus | null => {
+    if (!displayedKeyring || displayedKeyring.type === KeyringType.Empty) {
+      return null
+    }
+
+    try {
+      const keyring = this.displayedKeyringToWalletKeyring(displayedKeyring, index, initName)
+      if (keyring.accounts.length === 0) {
+        return this.corruptedDisplayedKeyringToWalletKeyring(
+          displayedKeyring,
+          index,
+          'No account',
+          initName
+        )
+      }
+      return keyring
+    } catch (e) {
+      log.warn('[WalletController] Marking invalid keyring as corrupted', {
+        index,
+        type: displayedKeyring.type,
+        error: e,
+      })
+      return this.corruptedDisplayedKeyringToWalletKeyring(
+        displayedKeyring,
+        index,
+        'Invalid Public Key',
+        initName
+      )
+    }
+  }
+
+  isUsableKeyring = (keyring: WalletKeyringWithStatus | null): keyring is WalletKeyring => {
+    return Boolean(keyring && !('isCorrupted' in keyring && keyring.isCorrupted))
+  }
+
+  getKeyrings = async (): Promise<WalletKeyringWithStatus[]> => {
     const displayedKeyrings = await keyringService.getAllDisplayedKeyrings()
     const keyrings: WalletKeyring[] = []
     for (let index = 0; index < displayedKeyrings.length; index++) {
       const displayedKeyring = displayedKeyrings[index]!
       if (displayedKeyring.type !== KeyringType.Empty) {
-        const keyring = this.displayedKeyringToWalletKeyring(
+        const keyring = this.safeDisplayedKeyringToWalletKeyring(
           displayedKeyring,
           displayedKeyring.index
         )
-        keyrings.push(keyring)
+        if (keyring) {
+          keyrings.push(keyring)
+        }
       }
     }
 
@@ -1763,22 +1854,29 @@ export class WalletController extends BaseController {
       }
     }
 
-    if (
-      !displayedKeyrings[currentKeyringIndex] ||
-      displayedKeyrings[currentKeyringIndex]!.type === KeyringType.Empty ||
-      !displayedKeyrings[currentKeyringIndex]!.accounts[0]
-    ) {
+    let currentKeyring = this.safeDisplayedKeyringToWalletKeyring(
+      displayedKeyrings[currentKeyringIndex]!,
+      currentKeyringIndex
+    )
+
+    if (!this.isUsableKeyring(currentKeyring)) {
       for (let i = 0; i < displayedKeyrings.length; i++) {
-        if (displayedKeyrings[i]!.type !== KeyringType.Empty) {
+        if (displayedKeyrings[i]!.type === KeyringType.Empty) {
+          continue
+        }
+
+        const fallbackKeyring = this.safeDisplayedKeyringToWalletKeyring(displayedKeyrings[i]!, i)
+        if (this.isUsableKeyring(fallbackKeyring)) {
           currentKeyringIndex = i
           preferenceService.setCurrentKeyringIndex(currentKeyringIndex)
+          preferenceService.setCurrentAccount(fallbackKeyring.accounts[0])
+          currentKeyring = fallbackKeyring
           break
         }
       }
     }
-    const displayedKeyring = displayedKeyrings[currentKeyringIndex]
-    if (!displayedKeyring) return null
-    return this.displayedKeyringToWalletKeyring(displayedKeyring, currentKeyringIndex)
+
+    return this.isUsableKeyring(currentKeyring) ? currentKeyring : null
   }
 
   getCurrentAccount = async () => {
@@ -3531,6 +3629,11 @@ export class WalletController extends BaseController {
   }
 
   createTmpKeyringWithPublicKey = async (publicKey: string, addressType: AddressType) => {
+    const networkType = this.getNetworkType()
+    if (!canDeriveAddressFromPublicKey(publicKey, addressType, networkType)) {
+      throw new Error('Invalid Public Key')
+    }
+
     const originKeyring = keyringService.createTmpKeyring(KeyringType.ReadonlyKeyring, [publicKey])
     const displayedKeyring = await keyringService.displayForKeyring(originKeyring, addressType, -1)
     const tmpKeyring = this.displayedKeyringToWalletKeyring(displayedKeyring, -1, false)
@@ -3543,6 +3646,10 @@ export class WalletController extends BaseController {
     alianName?: string
   ) => {
     let originKeyring: Keyring
+    const networkType = this.getNetworkType()
+    if (!canDeriveAddressFromPublicKey(data, addressType, networkType)) {
+      throw new Error('Invalid Public Key')
+    }
 
     try {
       originKeyring = await keyringService.importPublicKeyOnly(data, addressType as AddressType)
