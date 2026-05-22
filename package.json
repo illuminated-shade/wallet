@@ -13,6 +13,7 @@
     "clean": "pnpm -r clean",
     "typecheck": "pnpm -r typecheck",
     "dev": "pnpm -r dev",
+    "affected:packages": "node scripts/affected-packages.js",
     "mobile:doctor": "./apps/unisat-wallet-mobile/scripts/doctor.sh",
     "mobile:bootstrap": "./scripts/bootstrap-mobile.sh"
   },
