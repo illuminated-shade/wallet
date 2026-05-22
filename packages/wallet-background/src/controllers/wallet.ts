@@ -28,9 +28,9 @@ import {
 } from '@unisat/wallet-bitcoin'
 import {
   Account,
+  AccountSignMethod,
   AddressTokenSummary,
   AddressUserToSignInput,
-  AccountSignMethod,
   BRC20HistoryItem,
   BUS_EVENTS,
   BUS_METHODS,
@@ -362,6 +362,8 @@ export class WalletController extends BaseController {
       keyringService.keyrings.length - 1
     )
     await this.changeKeyring(keyring)
+
+    preferenceService.setShowSafeNotice(true)
   }
 
   getPreMnemonics = () => keyringService.getPreMnemonics()
@@ -398,6 +400,8 @@ export class WalletController extends BaseController {
     )
 
     await this.changeKeyring(keyring)
+
+    preferenceService.setShowSafeNotice(true)
   }
 
   createTmpKeyringWithMnemonics = async (
@@ -542,6 +546,7 @@ export class WalletController extends BaseController {
       keyringService.keyrings.length - 1
     )
     await this.changeKeyring(keyring)
+    preferenceService.setShowSafeNotice(true)
   }
 
   createKeyringWithColdWallet = async (
@@ -581,6 +586,7 @@ export class WalletController extends BaseController {
 
     await this.changeKeyring(keyring)
 
+    preferenceService.setShowSafeNotice(true)
     return keyring
   }
 
@@ -3527,8 +3533,8 @@ export class WalletController extends BaseController {
   createTmpKeyringWithPublicKey = async (publicKey: string, addressType: AddressType) => {
     const originKeyring = keyringService.createTmpKeyring(KeyringType.ReadonlyKeyring, [publicKey])
     const displayedKeyring = await keyringService.displayForKeyring(originKeyring, addressType, -1)
-    preferenceService.setShowSafeNotice(true)
-    return this.displayedKeyringToWalletKeyring(displayedKeyring, -1, false)
+    const tmpKeyring = this.displayedKeyringToWalletKeyring(displayedKeyring, -1, false)
+    return tmpKeyring
   }
 
   createKeyringWithPublicKey = async (
@@ -3554,6 +3560,8 @@ export class WalletController extends BaseController {
       keyringService.keyrings.length - 1
     )
     await this.changeKeyring(keyring)
+
+    preferenceService.setShowSafeNotice(true)
   }
 
   createTmpKeyringWithAddress = async (address: string) => {
@@ -3586,6 +3594,8 @@ export class WalletController extends BaseController {
       keyringService.keyrings.length - 1
     )
     await this.changeKeyring(keyring)
+
+    preferenceService.setShowSafeNotice(true)
   }
 
   createDummyPsbt = async ({
